@@ -3,7 +3,7 @@
 -- gera saída com modulacao pwm
 --
 -- parametros: CONTAGEM_MAXIMA e posicao_pwm
---             (clock a 50MHz ou 20ns)
+--             (clock a 50MHz ou 20ms)
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -20,8 +20,8 @@ end controle_servo;
 
 architecture rtl of controle_servo is
 
-  constant CONTAGEM_MAXIMA : integer := 1000000;  -- valor para frequencia da saida de 4KHz 
-                                               -- ou periodo de 25us
+  constant CONTAGEM_MAXIMA : integer := 1000000;  -- valor para frequencia da saida de 50Hz 
+                                                  -- ou periodo de 20ms
   signal contagem     : integer range 0 to CONTAGEM_MAXIMA-1;
   signal posicao_pwm  : integer range 0 to CONTAGEM_MAXIMA-1;
   signal s_posicao    : integer range 0 to CONTAGEM_MAXIMA-1;
@@ -58,7 +58,7 @@ begin
       when "01" =>    s_posicao <=   50000;  -- pulso de   1 ms
       when "10" =>    s_posicao <=   75000;  -- pulso de 1,5 ms
       when "11" =>    s_posicao <=  100000;  -- pulso de   2 ms
-      when others =>  s_posicao <=       0;  -- nulo   saida 0
+      when others =>  s_posicao <=       0;  -- nulo    saida 0
     end case;
   end process;
   
