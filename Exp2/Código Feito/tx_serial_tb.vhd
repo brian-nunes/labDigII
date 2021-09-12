@@ -8,7 +8,7 @@ end entity;
 architecture tb of tx_serial_tb is
   
   -- Componente a ser testado (Device Under Test -- DUT)
-  component tx_serial_8N2
+  component tx_serial_82N
     port (
         clock, reset, partida: in  std_logic;
         dados_ascii:           in  std_logic_vector (7 downto 0);
@@ -37,7 +37,7 @@ begin
   clock_in <= (not clock_in) and keep_simulating after clockPeriod/2;
   
   -- Conecta DUT (Device Under Test)
-  dut: tx_serial_8N2
+  dut: tx_serial_82N
        port map
        ( 
            clock=>          clock_in,
@@ -78,10 +78,65 @@ begin
 	
 	---- final do caso de teste 1
 
-  -- intervalo entre casos de teste
-  wait for 5000*clockPeriod;
+    -- intervalo entre casos de teste
+    wait for 5000*clockPeriod;
+
+    ---- dado de entrada da simulacao (caso de teste #2)
+    dados_ascii_8_in <= "01110101"; -- x75 = 'u'	
+    wait for 20*clockPeriod;
+
+    ---- acionamento da partida (inicio da transmissao)
+    partida_in <= '1';
+    wait until rising_edge(clock_in);
+    wait for 5*clockPeriod; -- pulso partida com 5 periodos de clock
+    partida_in <= '0';
+
+    ---- espera final da transmissao (pulso pronto em 1)
+    wait until pronto_out='1';
     
-  wait; -- fim da simulação: aguarda indefinidamente
+    ---- final do caso de teste 2
+
+    -- intervalo entre casos de teste
+    wait for 5000*clockPeriod;
+	
+    ---- dado de entrada da simulacao (caso de teste #3)
+    dados_ascii_8_in <= "01010100"; -- x54 = 'T'	
+    wait for 20*clockPeriod;
+
+    ---- acionamento da partida (inicio da transmissao)
+    partida_in <= '1';
+    wait until rising_edge(clock_in);
+    wait for 5*clockPeriod; -- pulso partida com 5 periodos de clock
+    partida_in <= '0';
+
+    ---- espera final da transmissao (pulso pronto em 1)
+    wait until pronto_out='1';
+    
+    ---- final do caso de teste 3
+
+    -- intervalo entre casos de teste
+    wait for 5000*clockPeriod;
+
+    ---- dado de entrada da simulacao (caso de teste #4)
+    dados_ascii_8_in <= "01001011"; -- x4B = 'k'	
+    wait for 20*clockPeriod;
+
+    ---- acionamento da partida (inicio da transmissao)
+    partida_in <= '1';
+    wait until rising_edge(clock_in);
+    wait for 5*clockPeriod; -- pulso partida com 5 periodos de clock
+    partida_in <= '0';
+
+    ---- espera final da transmissao (pulso pronto em 1)
+    wait until pronto_out='1';
+    
+    ---- final do caso de teste 4
+
+    ---- final dos casos de teste da simulacao
+    assert false report "Fim da simulacao" severity note;
+    keep_simulating <= '0';
+    
+    wait; -- fim da simulação: aguarda indefinidamente
   end process;
 
 
