@@ -1,0 +1,22 @@
+v 4
+file . ".\tx_serial_8N2.vhd" "2b4c3f7ff36762a20becb54b2d2dcf6fd9f103e6" "20210912195941.533":
+  entity tx_serial_8n2 at 1( 0) + 0 on 21;
+  architecture tx_serial_8n2_arch of tx_serial_8n2 at 14( 296) + 0 on 22;
+file . ".\tx_serial_8N2_fd.vhd" "a1e7afac72eca0e67c5fcb6072d4becbc45bcef6" "20210912195922.127":
+  entity tx_serial_8n2_fd at 1( 0) + 0 on 17;
+  architecture tx_serial_8n2_fd_arch of tx_serial_8n2_fd at 14( 376) + 0 on 18;
+file . ".\deslocador_n.vhd" "2d9dccea45a4e0ae3229bad75c201711b27b2534" "20210912195907.496":
+  entity deslocador_n at 19( 801) + 0 on 13;
+  architecture deslocador_n_arch of deslocador_n at 34( 1247) + 0 on 14;
+file . ".\contador_m.vhd" "f17be4e46f84884d1f7952a2d14c538470718498" "20210912195902.746":
+  entity contador_m at 18( 751) + 0 on 11;
+  architecture contador_m_arch of contador_m at 34( 1152) + 0 on 12;
+file . ".\edge_detector.vhd" "fd2491f6333432110cb7cf13dc8cfaa897d02891" "20210912195915.426":
+  entity edge_detector at 17( 719) + 0 on 15;
+  architecture behavioral of edge_detector at 27( 946) + 0 on 16;
+file . ".\tx_serial_tick_uc.vhd" "aff52dfc4392427a4cfa36656bf9d32a26c57184" "20210912195929.608":
+  entity tx_serial_tick_uc at 1( 0) + 0 on 19;
+  architecture tx_serial_tick_uc_arch of tx_serial_tick_uc at 10( 231) + 0 on 20;
+file . ".\tx_serial_tb.vhd" "ce84c79336274ec5c57d1df96412dbe689279155" "20210912200224.040":
+  entity tx_serial_tb at 1( 0) + 0 on 25;
+  architecture tb of tx_serial_tb at 8( 113) + 0 on 26;
