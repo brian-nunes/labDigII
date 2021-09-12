@@ -1,0 +1,4 @@
+v 4
+file . ".\controle_servo_desafio.vhd" "91c7aca509d033010270423d1039f562f1e1a9a0" "20210908145103.721":
+  entity controle_servo at 8( 171) + 0 on 11;
+  architecture rtl of controle_servo at 22( 592) + 0 on 12;
