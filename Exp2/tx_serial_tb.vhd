@@ -94,11 +94,57 @@ begin
 
     -- intervalo entre casos de teste
     wait for 5000*clockPeriod;
-	
-    ----
-    ---- colocar aqui outros casos de teste
-    ----
 
+    ---- dado de entrada da simulacao (caso de teste #2)
+    dados_ascii_7_in <= "1110101"; -- x75 = 'u'	
+    wait for 20*clockPeriod;
+
+    ---- acionamento da partida (inicio da transmissao)
+    partida_in <= '1';
+    wait until rising_edge(clock_in);
+    wait for 5*clockPeriod; -- pulso partida com 5 periodos de clock
+    partida_in <= '0';
+
+    ---- espera final da transmissao (pulso pronto em 1)
+    wait until pronto_out='1';
+    
+    ---- final do caso de teste 2
+
+    -- intervalo entre casos de teste
+    wait for 5000*clockPeriod;
+	
+    ---- dado de entrada da simulacao (caso de teste #3)
+    dados_ascii_7_in <= "1010100"; -- x54 = 'T'	
+    wait for 20*clockPeriod;
+
+    ---- acionamento da partida (inicio da transmissao)
+    partida_in <= '1';
+    wait until rising_edge(clock_in);
+    wait for 5*clockPeriod; -- pulso partida com 5 periodos de clock
+    partida_in <= '0';
+
+    ---- espera final da transmissao (pulso pronto em 1)
+    wait until pronto_out='1';
+    
+    ---- final do caso de teste 3
+
+    -- intervalo entre casos de teste
+    wait for 5000*clockPeriod;
+
+    ---- dado de entrada da simulacao (caso de teste #4)
+    dados_ascii_7_in <= "1001011"; -- x4B = 'k'	
+    wait for 20*clockPeriod;
+
+    ---- acionamento da partida (inicio da transmissao)
+    partida_in <= '1';
+    wait until rising_edge(clock_in);
+    wait for 5*clockPeriod; -- pulso partida com 5 periodos de clock
+    partida_in <= '0';
+
+    ---- espera final da transmissao (pulso pronto em 1)
+    wait until pronto_out='1';
+    
+    ---- final do caso de teste 4
 
     ---- final dos casos de teste da simulacao
     assert false report "Fim da simulacao" severity note;

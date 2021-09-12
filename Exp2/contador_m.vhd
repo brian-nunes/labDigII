@@ -43,7 +43,7 @@ begin
                 if IQ=M-1 then IQ <= 0; 
                 else IQ <= IQ + 1; 
                 end if;
-            end if; 
+            end if;
         end if;
         
         if IQ=M-1 then fim <= '1'; 
