@@ -65,7 +65,7 @@ begin
 
     -- gerador de tick
     -- fator de divisao 50MHz para 9600 bauds (434=50M/9600), 9 bits
-    U3_TICK: contador_m generic map (M => 5208, N => 9) port map (clock, s_zera, '1', open, s_tick);
+    U3_TICK: contador_m generic map (M => 5208, N => 13) port map (clock, s_zera, '1', open, s_tick);
  
     -- detetor de borda para tratar pulsos largos
     U4_ED: edge_detector port map (clock, s_partida, s_partida_ed);
