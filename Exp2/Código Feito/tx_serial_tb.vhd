@@ -8,7 +8,7 @@ end entity;
 architecture tb of tx_serial_tb is
   
   -- Componente a ser testado (Device Under Test -- DUT)
-  component tx_serial_82N
+  component tx_serial_8N2
     port (
         clock, reset, partida: in  std_logic;
         dados_ascii:           in  std_logic_vector (7 downto 0);
@@ -37,7 +37,7 @@ begin
   clock_in <= (not clock_in) and keep_simulating after clockPeriod/2;
   
   -- Conecta DUT (Device Under Test)
-  dut: tx_serial_82N
+  dut: tx_serial_8N2
        port map
        ( 
            clock=>          clock_in,
@@ -74,9 +74,9 @@ begin
     partida_in <= '0';
 
     ---- espera final da transmissao (pulso pronto em 1)
-	wait until pronto_out='1';
-	
-	---- final do caso de teste 1
+    wait until pronto_out='1';
+    
+    ---- final do caso de teste 1
 
     -- intervalo entre casos de teste
     wait for 5000*clockPeriod;
