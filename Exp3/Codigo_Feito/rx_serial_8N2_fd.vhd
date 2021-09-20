@@ -1,8 +1,9 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.math_real.all;
 
-entity rx_serial_8N2_fd
+entity rx_serial_8N2_fd is
   port(
     clock, reset, carrega, desloca, limpa, registra, zera, conta: in  std_logic;
     dado_serial:                                                  in  std_logic;

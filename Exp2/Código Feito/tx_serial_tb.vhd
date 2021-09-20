@@ -118,7 +118,7 @@ begin
     wait for 5000*clockPeriod;
 
     ---- dado de entrada da simulacao (caso de teste #4)
-    dados_ascii_8_in <= "01001011"; -- x4B = 'k'	
+    dados_ascii_8_in <= "01001011"; -- x4B = 'K'	
     wait for 20*clockPeriod;
 
     ---- acionamento da partida (inicio da transmissao)

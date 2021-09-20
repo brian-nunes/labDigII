@@ -64,7 +64,7 @@ begin
                                       dados_ascii, saida_serial, s_fim);
 
     -- gerador de tick
-    -- fator de divisao 50MHz para 9600 bauds (434=50M/9600), 9 bits
+    -- fator de divisao 50MHz para 9600 bauds (5208=50M/9600), 13 bits
     U3_TICK: contador_m generic map (M => 5208, N => 13) port map (clock, s_zera, '1', open, s_tick);
  
     -- detetor de borda para tratar pulsos largos

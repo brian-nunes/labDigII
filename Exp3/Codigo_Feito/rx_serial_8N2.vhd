@@ -26,7 +26,7 @@ architecture rx_serial_8N2_arch of rx_serial_8N2 is
   component rx_serial_tick_uc
     port(
       clock, dado_serial, reset, tick, fim, recebe_dado: in  std_logic;
-      carrega, desloca, limpa, registra, zera, conta:    out std_logic;
+      carrega, desloca, limpa, registra, zera, conta, pronto, tem_dado:    out std_logic;
       db_estado:                                         out std_logic_vector(3 downto 0)
     );
   end component;
@@ -69,15 +69,13 @@ architecture rx_serial_8N2_arch of rx_serial_8N2 is
     s_reset <= reset;
     s_recebe_dado <= recebe_dado;
 
-    Unidade_Controle: rx_serial_tick_uc port map(clock, dado_serial, s_reset, s_tick, s_fim, s_recebe_dado,
-                                                 s_carrega, s_desloca, s_limpa, s_registra, s_zera, s_conta, s_estado);
+    Unidade_Controle: rx_serial_tick_uc port map(clock, dado_serial, s_reset, s_tick, s_fim, s_recebe_dado, s_carrega,
+                                                  s_desloca, s_limpa, s_registra, s_zera, s_conta, pronto_rx, tem_dado, s_estado);
 
-    Fluxo_Dados: rx_serial_8N2_fd port map(clock, s_reset, s_carrega, s_desloca, s_limpa, s_registra, s_zera, s_conta, dado_serial,
-                                           dado_recebido, s_fim);
+    Fluxo_Dados: rx_serial_8N2_fd port map(clock, s_reset, s_carrega, s_desloca, s_limpa, s_registra, s_zera, s_conta,
+                                            dado_serial, dado_recebido, s_fim);
 
-    Contador_Ticks: contadorg_m generic map(M => 5208) port map(clock, s_reset, s_zera, '1',
-                                                                open, open, s_tick);
+    Contador_Ticks: contadorg_m generic map(M => 5208) port map(clock, s_reset, s_zera, '1', open, open, s_tick);
 
-    Display_Hexa: hex7seg port map(s_estado,
-                                  db_estado);
+    Display_Hexa: hex7seg port map(s_estado, db_estado);
 end architecture;
