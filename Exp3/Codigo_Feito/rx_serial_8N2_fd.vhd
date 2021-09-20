@@ -61,7 +61,7 @@ architecture rx_serial_8N2_fd_arch of rx_serial_8N2_fd is
     Registrador_Deslocamento: registrador_deslocamento_n generic map(N => 11) port map(clock, reset, carrega, desloca, dado_serial, s_dados,
                                                                                        s_saida);
 
-    Registrador: registrador_n generic map(N => 8) port map(clock, limpa, registra, s_saida,
+    Registrador: registrador_n generic map(N => 8) port map(clock, limpa, registra, s_saida(9 downto 2),
                                                             dado_recebido);
 
     Contador_Bits: contadorg_m generic map(M => 11) port map(clock, reset, zera, conta,

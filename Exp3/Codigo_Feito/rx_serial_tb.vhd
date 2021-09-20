@@ -91,7 +91,11 @@ architecture tb of rx_serial_tb is
         (2, "01010101"), -- 55H
         (3, "10101010"), -- AAH
         (4, "11111111"), -- FFH
-        (5, "00000000")  -- 00H
+        (5, "00000000"), -- 00H
+        (6, "11100111"), -- E7H
+        (7, "01100111"), -- 67H
+        (8, "11001100"), -- CCH
+        (9, "11000100")  -- C4H
         -- inserir aqui outros casos de teste (inserir "," na linha anterior)
       );
 
