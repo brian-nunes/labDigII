@@ -85,7 +85,7 @@ architecture tb of rx_serial_tb is
   end record;
 
   type casos_teste_array is array (natural range <>) of caso_teste_type;
-  constant casos_teste : casos_teste_array :=A
+  constant casos_teste : casos_teste_array :
       (
         (1, "00110101"), -- 35H
         (2, "01010101"), -- 55H
