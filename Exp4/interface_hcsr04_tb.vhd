@@ -2,11 +2,11 @@
 -- Arquivo   : interface_hcsr04_tb.vhd
 -- Projeto   : Experiencia 4 - Interface com sensor de distancia
 --------------------------------------------------------------------
--- Descricao : testbench para circuito de interface com HC-SR04 
+-- Descricao : testbench para circuito de interface com HC-SR04
 --
---             1) array de casos de teste contém valores de  
+--             1) array de casos de teste contém valores de
 --                largura de pulso de echo do sensor
--- 
+--
 --------------------------------------------------------------------
 -- Revisoes  :
 --     Data        Versao  Autor             Descricao
@@ -20,7 +20,7 @@ entity interface_hcsr04_tb is
 end entity;
 
 architecture tb of interface_hcsr04_tb is
-  
+
   -- Componente a ser testado (Device Under Test -- DUT)
   component interface_hcsr04
     port (
@@ -33,7 +33,7 @@ architecture tb of interface_hcsr04_tb is
             db_estado:    out std_logic_vector(3 downto 0)
     );
   end component;
-  
+
   -- Declaração de sinais para conectar o componente a ser testado (DUT)
   --   valores iniciais para fins de simulacao (GHDL ou ModelSim)
   signal clock_in:      std_logic := '0';
@@ -48,18 +48,22 @@ architecture tb of interface_hcsr04_tb is
   -- Configurações do clock
   signal keep_simulating: std_logic := '0'; -- delimita o tempo de geração do clock
   constant clockPeriod:   time := 20 ns;    -- clock de 50MHz
-  
+
   -- Array de casos de teste
   type caso_teste_type is record
-      id    : natural; 
-      tempo : integer;     
+      id    : natural;
+      tempo : integer;
   end record;
 
   type casos_teste_array is array (natural range <>) of caso_teste_type;
   constant casos_teste : casos_teste_array :=
       (
         (1, 5882),  -- 5882us (100cm)
-        (2, 4353)   -- 4353us (74cm)
+        (2, 4353),  -- 4353us (74cm)
+        (3, 2941),  -- 2941us (50cm)
+        (4, 1941),  -- 1941us (33cm)
+        (5, 20587), -- 20587us (350cm)
+        (6, 294)    -- 294us (5cm)
         -- inserir aqui outros casos de teste (inserir "," na linha anterior)
       );
 
@@ -67,10 +71,10 @@ architecture tb of interface_hcsr04_tb is
 
 begin
   -- Gerador de clock: executa enquanto 'keep_simulating = 1', com o período
-  -- especificado. Quando keep_simulating=0, clock é interrompido, bem como a 
+  -- especificado. Quando keep_simulating=0, clock é interrompido, bem como a
   -- simulação de eventos
   clock_in <= (not clock_in) and keep_simulating after clockPeriod/2;
-  
+
   -- Conecta DUT (Device Under Test)
   dut: interface_hcsr04
        port map( clock=>      clock_in,
@@ -86,17 +90,17 @@ begin
   -- geracao dos sinais de entrada (estimulos)
   stimulus: process is
   begin
-  
+
     assert false report "Inicio das simulacoes" severity note;
     keep_simulating <= '1';
-    
+
     ---- valores iniciais ----------------
     medir_in <= '0';
     echo_in  <= '0';
 
     ---- inicio: reset ----------------
     wait for 2*clockPeriod;
-    reset_in <= '1'; 
+    reset_in <= '1';
     wait for 2 us;
     reset_in <= '0';
     wait until falling_edge(clock_in);
@@ -116,19 +120,19 @@ begin
         medir_in <= '1';
         wait for 5*clockPeriod;
         medir_in <= '0';
-     
+
         -- 3) espera por 400us (tempo entre trigger e echo)
         wait for 400 us;
-     
+
         -- 4) gera pulso de echo (largura = larguraPulso)
         echo_in <= '1';
         wait for larguraPulso;
         echo_in <= '0';
-     
+
         -- 5) espera final da medida
       	wait until pronto_out = '1';
         assert false report "Fim do caso " & integer'image(casos_teste(i).id) severity note;
-     
+
         -- 6) espera entre casos de tese
         wait for 100 us;
 
@@ -137,7 +141,7 @@ begin
     ---- final dos casos de teste da simulacao
     assert false report "Fim das simulacoes" severity note;
     keep_simulating <= '0';
-    
+
     wait; -- fim da simulação: aguarda indefinidamente (não retirar esta linha)
   end process;
 

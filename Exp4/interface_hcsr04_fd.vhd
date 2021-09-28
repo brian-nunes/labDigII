@@ -38,8 +38,8 @@ architecture interface_hcsr04_fd_arch of interface_hcsr04_fd is
     );
   end component;
 
-  component contador_bcd_4digitos 
-    port ( 
+  component contador_bcd_4digitos
+    port (
       clock, zera, conta:     in  std_logic;
       dig3, dig2, dig1, dig0: out std_logic_vector(3 downto 0);
       fim:                    out std_logic
@@ -73,7 +73,7 @@ architecture interface_hcsr04_fd_arch of interface_hcsr04_fd is
 
     registrador: registrador_n generic map(N => 12) port map(clock, reset, s_registra, s_medida_interno, s_medida);
 
-    contagem_centimetros: contador_bcd_4digitos port map (clock, reset, s_conta_centimetro, s_medida_interno(11 downto 8), s_medida_interno(7 downto 4), s_medida_interno(3 downto 0), open, open);
+    contagem_centimetros: contador_bcd_4digitos port map (clock, reset, s_conta_centimetro, open, s_medida_interno(11 downto 8), s_medida_interno(7 downto 4), s_medida_interno(3 downto 0), open);
 
     contador: contadorg_m generic map(M => 2940) port map(clock, reset, reset, s_conta, open, s_conta_centimetro, open);
 

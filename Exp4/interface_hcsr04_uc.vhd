@@ -4,15 +4,15 @@ use ieee.numeric_std.all;
 
 entity interface_hcsr04_uc is
   port(
-    clock, reset, medir, echo:         in  std_logic;
-    gera, pronto, contaEcho, registra: out std_logic;
-    db_estado:                         out std_logic_vector(3 downto 0)
+    clock, reset, medir, echo:                in  std_logic;
+    gera, pronto, contaEcho, registra, limpa: out std_logic;
+    db_estado:                                out std_logic_vector(3 downto 0)
   );
 end entity;
 
 architecture interface_hcsr04_uc_arch of interface_hcsr04_uc is
 
-  type tipo_estado is (inicial, enviaPulso, aguardaEcho, calculaDistancia, registraDistancia, mostraDistancia);
+  type tipo_estado is (inicial, LimpaFD, enviaPulso, aguardaEcho, calculaDistancia, registraDistancia, mostraDistancia);
   signal Eatual, Eprox: tipo_estado;
 
   begin
@@ -28,15 +28,16 @@ architecture interface_hcsr04_uc_arch of interface_hcsr04_uc is
     end process;
 
     -- logica de proximo estado
-    process (medir, Eatual)
+    process (medir, Eatual, echo)
     begin
       case Eatual is
-        when inicial           => if medir = '1'    then    Eprox <= enviaPulso;
+        when inicial           => if medir = '1'    then    Eprox <= LimpaFD;
                                   else                      Eprox <= inicial;
                                   end if;
 
+        when LimpaFD        => Eprox <= enviaPulso;
+
         when enviaPulso        => Eprox <= aguardaEcho;
-                                             
 
         when aguardaEcho       => if echo = '1'     then    Eprox <= calculaDistancia;
                                   else                      Eprox <= aguardaEcho;
@@ -49,13 +50,16 @@ architecture interface_hcsr04_uc_arch of interface_hcsr04_uc is
         when registraDistancia => Eprox <= mostraDistancia;
 
         when others =>            Eprox <= inicial;
-        
+
       end case;
     end process;
 
     -- logica de saida (Moore)
     with Eatual select
       gera <= '1' when enviaPulso, '0' when others;
+
+    with Eatual select
+      limpa <= '1' when LimpaFD, '0' when others;
 
     with Eatual select
       contaEcho <= '1' when calculaDistancia, '0' when others;
@@ -75,5 +79,6 @@ architecture interface_hcsr04_uc_arch of interface_hcsr04_uc is
                     "0100" when registraDistancia,  -- 4
                     "0101" when mostraDistancia,    -- 5
                     "1111" when others;             -- F
+
 
 end architecture;
