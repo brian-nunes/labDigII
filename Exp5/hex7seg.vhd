@@ -1,3 +1,16 @@
+--------------------------------------------------------------------
+-- Arquivo   : hex7seg.vhd
+-- Projeto   : Experiencia 3 - Recepcao Serial Assincrona
+--------------------------------------------------------------------
+-- Descricao : decodificador hexadecimal para display de 7 segmentos 
+-- 
+--------------------------------------------------------------------
+-- Revisoes  :
+--     Data        Versao  Autor             Descricao
+--     09/09/2021  1.0     Edson Midorikawa  versao inicial
+--------------------------------------------------------------------
+--
+
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -13,7 +26,7 @@ begin
     process (hexa)
     begin
         case hexa is
-            when "0000" => sseg <= "1000000"; -- 0 40
+            when "0000" => sseg <= "1000000"; -- 0 40 
             when "0001" => sseg <= "1111001"; -- 1 79
             when "0010" => sseg <= "0100100"; -- 2 24
             when "0011" => sseg <= "0110000"; -- 3 30
