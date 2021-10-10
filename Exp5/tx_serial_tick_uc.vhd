@@ -2,8 +2,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity tx_serial_tick_uc is 
-    port ( clock, reset, partida, tick, fim:      in  std_logic;
-           zera, conta, carrega, desloca, pronto: out std_logic
+    port ( 
+        clock, reset, partida, tick, fim:      in  std_logic;
+        zera, conta, carrega, desloca, pronto: out std_logic;
+        db_estado:                             out std_logic_vector(3 downto 0)
     );
 end entity;
 
@@ -69,5 +71,13 @@ begin
 
     with Eatual select
         pronto <= '1' when final, '0' when others;
+
+    with Eatual select
+        db_estado <=  "0000" when inicial,         -- 0
+                      "0001" when preparacao,      -- 1
+                      "0010" when espera,          -- 2
+                      "0011" when transmissao,     -- 3
+                      "0100" when final,           -- 4
+                      "1111" when others;          -- F
 
 end tx_serial_tick_uc_arch;

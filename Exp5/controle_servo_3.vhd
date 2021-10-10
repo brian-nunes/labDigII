@@ -9,7 +9,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity controle_servo is
+entity controle_servo_3 is
 port (
       clock    : in  std_logic;
       reset    : in  std_logic;
@@ -19,9 +19,9 @@ port (
       db_pwm: out std_logic;
       db_posicao: out std_logic_vector(2 downto 0)
      );
-end controle_servo;
+end controle_servo_3;
 
-architecture rtl of controle_servo is
+architecture rtl of controle_servo_3 is
 
   constant CONTAGEM_MAXIMA : integer := 1000000;  -- valor para frequencia da saida de 50Hz 
                                                   -- ou periodo de 20ms

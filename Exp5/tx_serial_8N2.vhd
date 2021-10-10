@@ -7,7 +7,8 @@ entity tx_serial_8N2 is
     port (
         clock, reset, partida: in  std_logic;
         dados_ascii:           in  std_logic_vector (7 downto 0);
-        saida_serial, pronto_tx : out std_logic
+        saida_serial, pronto_tx : out std_logic;
+        db_estado:     out std_logic_vector(3 downto 0)
     );
 end entity;
 
@@ -50,7 +51,7 @@ begin
 
     -- unidade de controle
     U1_UC: tx_serial_tick_uc port map (clock, s_reset, s_partida, s_tick, s_fim,
-                                       s_zera, s_conta, s_carrega, s_desloca, pronto_tx);
+                                       s_zera, s_conta, s_carrega, s_desloca, pronto_tx, db_estado);
 
     -- fluxo de dados
     U2_FD: tx_serial_8N2_fd port map (clock, s_reset, s_zera, s_conta, s_carrega, s_desloca, 
