@@ -21,7 +21,7 @@ entity tx_dados_sonar is
         db_estado: out std_logic_vector(3 downto 0)
     );
 end entity;
-   
+
 architecture tx_dados_sonar_arch of tx_dados_sonar is
     component tx_dados_sonar_uc
         port(
@@ -34,7 +34,7 @@ architecture tx_dados_sonar_arch of tx_dados_sonar is
 
     component tx_dados_sonar_fd
         port(
-          clock, reset, trasmitir:      in  std_logic;
+          clock, reset, transmitir:      in  std_logic;
           angulo2:                      in std_logic_vector(3 downto 0); -- digitos BCD
           angulo1:                      in std_logic_vector(3 downto 0); -- de angulo
           angulo0:                      in std_logic_vector(3 downto 0);

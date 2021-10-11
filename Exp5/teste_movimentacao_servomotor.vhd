@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.math_real.all;
 
 entity teste_movimentacao_servomotor is
     port (
@@ -13,7 +14,7 @@ entity teste_movimentacao_servomotor is
         posicao: out std_logic_vector(2 downto 0)
     );
 end entity;
-   
+
 architecture teste_movimentacao_servomotor_arch of teste_movimentacao_servomotor is
     component contadorg_m
         generic (
@@ -38,7 +39,7 @@ architecture teste_movimentacao_servomotor_arch of teste_movimentacao_servomotor
             Q:       out std_logic_vector (natural(ceil(log2(real(M))))-1 downto 0);
             inicio:  out std_logic;
             fim:     out std_logic;
-            meio:    out std_logic 
+            meio:    out std_logic
         );
     end component;
 
@@ -61,11 +62,11 @@ begin
     s_reset <= reset;
 
     -- Dado clock de 50MHz
-    contador: contadorg_m generic map (M => 50000000) port map (clock, s_reset, s_reset, s_ligar, open, s_fim_contador, open)
+    contador: contadorg_m generic map (M => 50000000) port map (clock, s_reset, s_reset, s_ligar, open, s_fim_contador, open);
 
-    updown: contadorg_updown_m generic map (M => 8) port map (clock, s_reset, s_reset, s_fim_contador, s_posicao, open, open, open)
+    updown: contadorg_updown_m generic map (M => 8) port map (clock, s_reset, s_reset, s_fim_contador, s_posicao, open, open, open);
 
-    servo: controle_servo_3 port map(clock, s_reset, s_posicao, pwm, open, db_pwm, open)
+    servo: controle_servo_3 port map(clock, s_reset, s_posicao, pwm, open, db_pwm, open);
 
     posicao <= s_posicao;
     db_ligar <= s_ligar;
