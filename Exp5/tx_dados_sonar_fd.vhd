@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 entity tx_dados_sonar_fd is
     port(
-        clock, reset, trasmitir:      in  std_logic;
+        clock, reset, transmitir:     in  std_logic;
         angulo2:                      in std_logic_vector(3 downto 0); -- digitos BCD
         angulo1:                      in std_logic_vector(3 downto 0); -- de angulo
         angulo0:                      in std_logic_vector(3 downto 0);
@@ -59,12 +59,28 @@ architecture tx_dados_sonar_fd_arch of tx_dados_sonar_fd is
         );
     end component;
 
-    signal saida_mux: std_logic_vector(6 downto 0);
+    signal saida_mux, s_angulo2,  s_angulo1, s_angulo0, s_distancia2,  s_distancia1, s_distancia0, virgula, ponto: std_logic_vector(7 downto 0);
+    signal const_001: std_logic_vector(3 downto 0);
+    signal rx_serial_pino: std_logic;
 begin
+    const_001 <= "0011";
 
-    mux: mux_8x1_n generic map (BITS => 7) port map ("011" & angulo2, "011" & angulo1, "011" & angulo0, "0101100", "011" & distancia2, "011" & distancia1, "011" & distancia0, "0101110", seletor_dado, saida_mux)
+    s_angulo2 <= const_001 & angulo2;
+    s_angulo1 <= const_001 & angulo1;
+    s_angulo0 <= const_001 & angulo0;
 
-    transmissor: uart_8N2 port map (clock, reset, transmitir, saida_mux, open, open, saida_serial, fim_transmissao, open, open, open, open, open, open, open, open, open)
+    s_distancia2 <= const_001 & distancia2;
+    s_distancia1 <= const_001 & distancia1;
+    s_distancia0 <= const_001 & distancia0;
+
+    virgula <= "00101100";
+    ponto <="00101110";
+
+    rx_serial_pino <= '0';
+
+    mux: mux_8x1_n generic map (BITS => 7) port map (s_angulo2, s_angulo1, s_angulo0, virgula, s_distancia2, s_distancia1, s_distancia0, ponto, seletor_dado, saida_mux);
+
+    transmissor: uart_8N2 port map (clock, reset, transmitir, saida_mux, rx_serial_pino, rx_serial_pino, saida_serial, fim_transmissao, open, open, open, open, open, open, open, open, open);
     
 end architecture;
 

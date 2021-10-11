@@ -49,7 +49,7 @@ architecture teste_tx_dados_sonar_arch of teste_tx_dados_sonar is
 
 begin
 
-    dados_sonar: tx_dados_sonar port map (clock, reset, transmitir_detected, "0110111", "0110101", "0110001", "0110111", "0110001", "0110000", saida_serial, pronto, db_transmitir, db_saida_serial, db_estado);
+    dados_sonar: tx_dados_sonar port map (clock, reset, transmitir_detected, "0111", "0101", "0001", "0111", "0001", "0000", saida_serial, pronto, db_transmitir, db_saida_serial, db_estado);
 
     detector_borda: edge_detector port map (clock, transmitir, transmitir_detected);
 

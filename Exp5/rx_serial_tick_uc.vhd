@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity rx_serial_tick_uc is
   port(
     clock, dado_serial, reset, tick, fim, recebe_dado: in  std_logic;
-    carrega, desloca, limpa, registra, zera, conta:    out std_logic;
+    carrega, desloca, limpa, registra, zera, conta, pronto, tem_dado:    out std_logic;
     db_estado:                                         out std_logic_vector(3 downto 0)
   );
 end entity;

@@ -89,6 +89,7 @@ architecture tx_dados_sonar_uc_arch of tx_dados_sonar_uc is
                       "101" when transmited2,     -- 6
                       "110" when transmited3,     -- 7
                       "111" when transmiteponto,  -- 8
+                      "000" when others;
 
     -- Debug Estado (pro Display)
     with Eatual select
@@ -96,11 +97,11 @@ architecture tx_dados_sonar_uc_arch of tx_dados_sonar_uc is
                     "0001" when transmitea1,      -- 1
                     "0010" when transmitea2,      -- 2
                     "0011" when transmitea3,      -- 3
-                    "0100" when transmiteavirgula,-- 4
+                    "0100" when transmitevirgula, -- 4
                     "0101" when transmited1,      -- 5
                     "0110" when transmited2,      -- 6
                     "0111" when transmited3,      -- 7
-                    "1000" when transmiteaponto,  -- 8
+                    "1000" when transmiteponto,   -- 8
                     "1001" when final,            -- 9
                     "1111" when others;           -- F
 

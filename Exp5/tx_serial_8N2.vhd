@@ -16,7 +16,8 @@ architecture tx_serial_8N2_arch of tx_serial_8N2 is
      
     component tx_serial_tick_uc port ( 
 			clock, reset, partida, tick, fim:      in  std_logic;
-			zera, conta, carrega, desloca, pronto: out std_logic 
+			zera, conta, carrega, desloca, pronto: out std_logic;
+            db_estado:                             out std_logic_vector(3 downto 0)
     );
     end component;
 
