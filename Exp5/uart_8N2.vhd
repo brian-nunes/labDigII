@@ -38,35 +38,32 @@ architecture uart_8N2_arch of uart_8N2 is
 
     component rx_serial_8N2
         port(
-          clock:         in  std_logic;
-          reset:         in  std_logic;
-          dado_serial:   in  std_logic;
-          recebe_dado:   in  std_logic;
-          pronto_rx:     out std_logic;
-          tem_dado:      out std_logic;
-          dado_recebido: out std_logic_vector(7 downto 0);
-          db_estado:     out std_logic_vector(3 downto 0)
+            clock:         in  std_logic;
+            reset:         in  std_logic;
+            dado_serial:   in  std_logic;
+            recebe_dado:   in  std_logic;
+            pronto_rx:     out std_logic;
+            tem_dado:      out std_logic;
+            dado_recebido: out std_logic_vector(7 downto 0);
+            db_estado:     out std_logic_vector(3 downto 0)
         );
       end component;
 
-      signal s_transmite_dado, s_saida_serial, s_recebe_dado, s_dado_serial, s_pronto_rx, s_tem_dado: std_logic;
+      signal s_transmite_dado, s_saida_serial, s_recebe_dado, s_dado_serial: std_logic;
       signal s_dado: std_logic_vector(7 downto 0);
 
 begin
-
     s_transmite_dado <= transmite_dado;
     s_recebe_dado <= recebe_dado;
     s_dado_serial <= dado_serial;
 
-    receptor: rx_serial_8N2 port map (clock, reset, s_dado_serial, s_recebe_dado, s_pronto_rx, s_tem_dado, s_dado, db_estado_rx);
+    receptor: rx_serial_8N2 port map (clock, reset, s_dado_serial, s_recebe_dado, pronto_rx, tem_dado, dado_recebido_rx, db_estado_rx);
 
-    transmissor: tx_serial_8N2 port map (clock, reset, s_tem_dado, s_dado, s_saida_serial, pronto_tx, db_estado_tx);
+    transmissor: tx_serial_8N2 port map (clock, reset, s_transmite_dado, dados_ascii, s_saida_serial, pronto_tx, db_estado_tx);
 
     saida_serial <= s_saida_serial;
-    pronto_rx <= s_pronto_rx;
     db_transmite_dado <= s_transmite_dado;
     db_saida_serial <= s_saida_serial;
     db_recebe_dado <= s_recebe_dado;
     db_dado_serial <= s_dado_serial;
-
 end architecture;

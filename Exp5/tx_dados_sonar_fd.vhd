@@ -64,7 +64,7 @@ begin
 
     mux: mux_8x1_n generic map (BITS => 7) port map ("011" & angulo2, "011" & angulo1, "011" & angulo0, "0101100", "011" & distancia2, "011" & distancia1, "011" & distancia0, "0101110", seletor_dado, saida_mux)
 
-    transmissor: uart_8N2 port map (clock, reset, transmitir, saida_mux, )
+    transmissor: uart_8N2 port map (clock, reset, transmitir, saida_mux, open, open, saida_serial, fim_transmissao, open, open, open, open, open, open, open, open, open)
     
 end architecture;
 
