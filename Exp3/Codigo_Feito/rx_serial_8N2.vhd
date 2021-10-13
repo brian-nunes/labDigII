@@ -17,7 +17,7 @@ entity rx_serial_8N2 is
     pronto_rx:     out std_logic;
     tem_dado:      out std_logic;
     dado_recebido: out std_logic_vector(7 downto 0);
-    db_estado:     out std_logic_vector(6 downto 0)
+    db_estado:     out std_logic_vector(3 downto 0)
   );
 end entity;
 
@@ -52,13 +52,6 @@ architecture rx_serial_8N2_arch of rx_serial_8N2 is
     );
   end component;
 
-  component hex7seg
-    port(
-      hexa : in  std_logic_vector(3 downto 0);
-      sseg : out std_logic_vector(6 downto 0)
-    );
-  end component;
-
   signal s_reset, s_recebe_dado: std_logic;                                     -- sinais recebidos pelo Circuito Principal
   signal s_tick, s_fim: std_logic;                                              -- sinais recebidos pela UC
   signal s_carrega, s_desloca, s_limpa, s_registra, s_zera, s_conta: std_logic; -- sinais recebidos pelo FD
@@ -70,12 +63,10 @@ architecture rx_serial_8N2_arch of rx_serial_8N2 is
     s_recebe_dado <= recebe_dado;
 
     Unidade_Controle: rx_serial_tick_uc port map(clock, dado_serial, s_reset, s_tick, s_fim, s_recebe_dado, s_carrega,
-                                                  s_desloca, s_limpa, s_registra, s_zera, s_conta, pronto_rx, tem_dado, s_estado);
+                                                  s_desloca, s_limpa, s_registra, s_zera, s_conta, pronto_rx, tem_dado, db_estado);
 
     Fluxo_Dados: rx_serial_8N2_fd port map(clock, s_reset, s_carrega, s_desloca, s_limpa, s_registra, s_zera, s_conta,
                                             dado_serial, dado_recebido, s_fim);
 
     Contador_Ticks: contadorg_m generic map(M => 5208) port map(clock, s_reset, s_zera, '1', open, open, s_tick);
-
-    Display_Hexa: hex7seg port map(s_estado, db_estado);
 end architecture;
