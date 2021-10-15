@@ -15,3 +15,7 @@ ghdl -a .\uart_8N2.vhd
 ghdl -a .\tx_dados_sonar_fd.vhd
 ghdl -a .\tx_dados_sonar.vhd
 ghdl -a .\teste_tx_dados_sonar.vhd
+ghdl -a .\teste_tx_dados_sonar_tb.vhd
+ghdl -e teste_tx_dados_sonar_tb
+ghdl -r teste_tx_dados_sonar_tb --vcd=teste_tx_dados_sonar_tb.vcd
+gtkwave teste_tx_dados_sonar_tb.vcd

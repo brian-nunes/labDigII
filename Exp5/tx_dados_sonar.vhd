@@ -25,7 +25,7 @@ end entity;
 architecture tx_dados_sonar_arch of tx_dados_sonar is
     component tx_dados_sonar_uc
         port(
-            clock, envia, trasmitir, fim_transmissao: in  std_logic;
+            clock, reset, transmitir, fim_transmissao: in  std_logic;
             pronto, transmite_dado:                   out std_logic;
             seletor_dado:                             out std_logic_vector(2 downto 0);
             db_estado:                                out std_logic_vector(3 downto 0)
@@ -52,7 +52,7 @@ architecture tx_dados_sonar_arch of tx_dados_sonar is
 begin
     s_transmitir <= transmitir;
 
-    UC: tx_dados_sonar_uc port map (clock, reset, s_transmitir, s_fim_transmissao, s_transmitir_dado, pronto, s_seletor_dado, db_estado);
+    UC: tx_dados_sonar_uc port map (clock, reset, s_transmitir, s_fim_transmissao, pronto, s_transmitir_dado, s_seletor_dado, db_estado);
 
     FD: tx_dados_sonar_fd port map (clock, reset, s_transmitir_dado, angulo2, angulo1, angulo0, distancia2, distancia1, distancia0, s_seletor_dado, s_fim_transmissao, s_saida_serial);
 

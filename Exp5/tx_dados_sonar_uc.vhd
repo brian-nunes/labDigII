@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 entity tx_dados_sonar_uc is
   port(
-    clock, reset, trasmitir, fim_transmissao: in  std_logic;
+    clock, reset, transmitir, fim_transmissao: in  std_logic;
     pronto, transmite_dado:                   out std_logic;
     seletor_dado:                             out std_logic_vector(2 downto 0);
     db_estado:                                out std_logic_vector(3 downto 0)
@@ -29,12 +29,12 @@ architecture tx_dados_sonar_uc_arch of tx_dados_sonar_uc is
     end process;
 
     -- logica de proximo estado
-    process (trasmitir, fim_transmissao, Eatual)
+    process (transmitir, fim_transmissao, Eatual)
     begin
 
       case Eatual is
 
-        when inicial =>           if trasmitir = '1' then Eprox <= transmitea1;
+        when inicial =>           if transmitir = '1' then Eprox <= transmitea1;
                                   else                      Eprox <= inicial;
                                   end if;
 
