@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity tx_dados_sonar_uc is
   port(
     clock, reset, trasmitir, fim_transmissao: in  std_logic;
-    pronto:                                   out std_logic;
+    pronto, transmite_dado:                   out std_logic;
     seletor_dado:                             out std_logic_vector(2 downto 0);
     db_estado:                                out std_logic_vector(3 downto 0)
   );
@@ -74,6 +74,17 @@ architecture tx_dados_sonar_uc_arch of tx_dados_sonar_uc is
 
       end case;
     end process;
+
+    with Eatual select
+      transmite_dado <= '1' when transmitea1,     -- 1
+                        '1' when transmitea2,     -- 2
+                        '1' when transmitea3,     -- 3
+                        '1' when transmitevirgula,-- 4
+                        '1' when transmited1,     -- 5
+                        '1' when transmited2,     -- 6
+                        '1' when transmited3,     -- 7
+                        '1' when transmiteponto,  -- 8
+                        '0' when others;
 
     -- logica de saida (Moore)
     with Eatual select

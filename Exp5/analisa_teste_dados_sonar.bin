@@ -13,6 +13,5 @@ ghdl -a .\tx_serial_8N2_fd.vhd
 ghdl -a .\tx_serial_8N2.vhd
 ghdl -a .\uart_8N2.vhd
 ghdl -a .\tx_dados_sonar_fd.vhd
-ghdl -a .\tx_dados_sonar_uc.vhd
 ghdl -a .\tx_dados_sonar.vhd
 ghdl -a .\teste_tx_dados_sonar.vhd

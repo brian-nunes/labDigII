@@ -78,7 +78,7 @@ begin
 
     rx_serial_pino <= '0';
 
-    mux: mux_8x1_n generic map (BITS => 7) port map (s_angulo2, s_angulo1, s_angulo0, virgula, s_distancia2, s_distancia1, s_distancia0, ponto, seletor_dado, saida_mux);
+    mux: mux_8x1_n generic map (BITS => 8) port map (s_angulo0, s_angulo1, s_angulo2, virgula, s_distancia0, s_distancia1, s_distancia2, ponto, seletor_dado, saida_mux);
 
     transmissor: uart_8N2 port map (clock, reset, transmitir, saida_mux, rx_serial_pino, rx_serial_pino, saida_serial, fim_transmissao, open, open, open, open, open, open, open, open, open);
     
