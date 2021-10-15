@@ -70,4 +70,4 @@ begin
     posicao <= s_posicao;
     db_ligar <= s_ligar;
 
-end architecture;.
+end architecture;
