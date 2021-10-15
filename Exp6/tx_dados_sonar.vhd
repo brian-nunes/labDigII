@@ -18,7 +18,11 @@ entity tx_dados_sonar is
         pronto: out std_logic;
         db_transmitir: out std_logic;
         db_saida_serial: out std_logic;
-        db_estado: out std_logic_vector(3 downto 0)
+        db_estado: out std_logic_vector(3 downto 0);
+        db_estado_tx:                 out std_logic_vector(3 downto 0);
+        db_estado_rx:                 out std_logic_vector(3 downto 0);
+        db_dado_tx:                 out std_logic_vector(7 downto 0);
+        db_dado_rx:                 out std_logic_vector(7 downto 0)
     );
 end entity;
 
@@ -43,7 +47,11 @@ architecture tx_dados_sonar_arch of tx_dados_sonar is
           distancia0:                   in std_logic_vector(3 downto 0);
           seletor_dado:                 in std_logic_vector(2 downto 0);
           fim_transmissao:              out  std_logic;
-          saida_serial:                 out  std_logic
+          saida_serial:                 out  std_logic;
+          db_estado_tx:                 out std_logic_vector(3 downto 0);
+          db_estado_rx:                 out std_logic_vector(3 downto 0);
+          db_dado_tx:                 out std_logic_vector(7 downto 0);
+          db_dado_rx:                 out std_logic_vector(7 downto 0)
         );
     end component;
 

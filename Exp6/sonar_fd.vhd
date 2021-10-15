@@ -6,8 +6,10 @@ use ieee.math_real.all;
 entity sonar_fd is
     port(
         clock, reset, echo, medir, move, transmitir:     in  std_logic;
+        estado:     in  std_logic_vector(3 downto 0);
         depurador:     in  std_logic_vector(1 downto 0);
-        pwm, saida_serial, trigger, fim_medir, fim_transmissao, fim_mover, alerta_proximidade:      out  std_logic
+        pwm, saida_serial, trigger, fim_medir, fim_transmissao, fim_mover, alerta_proximidade:      out  std_logic;
+        saida_db:      out  std_logic_vector(23 downto 0)
     );
 end entity;
 
@@ -79,7 +81,11 @@ architecture sonar_fd_arch of sonar_fd is
             pronto: out std_logic;
             db_transmitir: out std_logic;
             db_saida_serial: out std_logic;
-            db_estado: out std_logic_vector(3 downto 0)
+            db_estado: out std_logic_vector(3 downto 0);
+            db_estado_tx:                 out std_logic_vector(3 downto 0);
+            db_estado_rx:                 out std_logic_vector(3 downto 0);
+            db_dado_tx:                 out std_logic_vector(7 downto 0);
+            db_dado_rx:                 out std_logic_vector(7 downto 0)
         );
     end component;
 
@@ -113,9 +119,11 @@ architecture sonar_fd_arch of sonar_fd is
 
     signal s_reset, s_db_pwm, s_db_transmitir, s_db_saida_serial, move_pulso: std_logic;
     signal s_posicao: std_logic_vector(2 downto 0);
+    signal s_depurador: std_logic_vector(1 downto 0);
     signal s_medida: std_logic_vector(11 downto 0);
-    signal s_angulo: std_logic_vector(23 downto 0);
-    signal db_estado_medidor, db_estado_transmissor: std_logic_vector(3 downto 0);
+    signal s_angulo, depurador_servo_medidor, depurador_uart, depurador_tx_dados_sonar, depurador_sonar: std_logic_vector(23 downto 0);
+    signal db_estado_medidor, db_estado_transmissor, s_db_estado_tx, s_db_estado_rx: std_logic_vector(3 downto 0);
+    signal s_db_dado_tx, s_db_dado_rx: std_logic_vector(7 downto 0);
 begin
     s_reset <= reset;
 
@@ -131,7 +139,13 @@ begin
 
     memoria_angulos:  rom_8x24 port map (s_posicao, s_angulo); 
 
-    dados_sonar: tx_dados_sonar port map (clock, s_reset, transmitir, s_angulo(19  downto 16), s_angulo(11  downto 8), s_angulo(3  downto 0), s_medida(11 downto 8), s_medida(7 downto 4), s_medida(3 downto 0), saida_serial, fim_transmissao, s_db_transmitir, s_db_saida_serial, db_estado_transmissor);
+    dados_sonar: tx_dados_sonar port map (clock, s_reset, transmitir, s_angulo(19  downto 16), s_angulo(11  downto 8), s_angulo(3  downto 0), s_medida(11 downto 8), s_medida(7 downto 4), s_medida(3 downto 0), saida_serial, fim_transmissao, s_db_transmitir, s_db_saida_serial, db_estado_transmissor, s_db_estado_tx, s_db_estado_rx, s_db_dado_tx, s_db_dado_rx);
+
+    depurador_servo_medidor <= "0" & s_posicao & db_estado_medidor & "0000" & s_medida;
+    depurador_uart <= s_db_estado_tx & s_db_dado_tx & s_db_estado_rx & s_db_dado_rx;
+    depurador_tx_dados_sonar <= db_estado_transmissor & "00" & s_depurador & s_db_dado_tx & "00000000";
+    depurador_sonar <= estado & "00000000" & s_angulo(19  downto 16) & s_angulo(11  downto 8) & s_angulo(3  downto 0);
+    depurador_mux: mux_4x1_n generic map (BITS => 24) port map (depurador_servo_medidor, depurador_uart, depurador_tx_dados_sonar, depurador_sonar, depurador, saida_db);
 
     with s_medida(7 downto 4) select
         alerta_proximidade <= '1' when "0001", 
