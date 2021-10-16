@@ -36,6 +36,7 @@ architecture tb_servo of sonar_controle_servo_tb is
   constant casos_teste : casos_teste_array :=
       (
         -- A primeira coisa que o sistema faz é se mover, então vai direto para a posição 2
+        -- (1, 990 us),   -- pulso de 1ms
         (2, 1133 us),  -- pulso de 1,143ms
         (3, 1276 us),  -- pulso de 1,286ms
         (4, 1419 us),  -- pulso de 1,429ms
@@ -92,7 +93,7 @@ begin
       wait until pwm_out'event and pwm_out = '1';
       wait for casos_teste(i).largura_de_pulso;
       assert pwm_out = '1' report "Falha na duracao. Teste: " & integer'image(casos_teste(i).id) severity error;
-      wait for 11 us;
+      wait for 14 us;
       assert pwm_out = '0' report "Falha no desativamento. Teste: " & integer'image(casos_teste(i).id) severity error;
 
       assert false report "Fim do teste " & integer'image(casos_teste(i).id) severity note;
@@ -104,7 +105,7 @@ begin
       wait for 588 us;
       echo_in <= '0';
 
-      wait for 5 ms; -- aguarda tempo de transmissão
+      wait for 30 ms; -- aguarda tempo de transmissão
 
     end loop;
 

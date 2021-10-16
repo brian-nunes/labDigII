@@ -14,7 +14,7 @@ entity sonar_fd is
 end entity;
 
 architecture sonar_fd_arch of sonar_fd is
-     
+
     component contadorg_m
         generic (
             constant M: integer := 50 -- modulo do contador
@@ -38,7 +38,7 @@ architecture sonar_fd_arch of sonar_fd is
             Q:       out std_logic_vector (natural(ceil(log2(real(M))))-1 downto 0);
             inicio:  out std_logic;
             fim:     out std_logic;
-            meio:    out std_logic 
+            meio:    out std_logic
        );
     end component;
 
@@ -64,8 +64,8 @@ architecture sonar_fd_arch of sonar_fd is
               db_pwm: out std_logic;
               db_posicao: out std_logic_vector(2 downto 0)
              );
-    end component;      
-    
+    end component;
+
     component tx_dados_sonar
         port (
             clock: in std_logic;
@@ -93,7 +93,7 @@ architecture sonar_fd_arch of sonar_fd is
         port (
             endereco: in  std_logic_vector(2 downto 0);
             saida   : out std_logic_vector(23 downto 0)
-        ); 
+        );
     end component;
 
     component edge_detector
@@ -102,12 +102,12 @@ architecture sonar_fd_arch of sonar_fd is
                output      : out  std_logic
         );
     end component;
-    
+
     component mux_4x1_n
         generic (
             constant BITS: integer := 4
         );
-        port ( 
+        port (
             D0 :     in  std_logic_vector (BITS-1 downto 0);
             D1 :     in  std_logic_vector (BITS-1 downto 0);
             D2 :     in  std_logic_vector (BITS-1 downto 0);
@@ -131,14 +131,14 @@ begin
 
     -- Reduzido para testes, lembrar de mudar para FPGA (10000 para testes e deve estar em 100000000 para FPGA)
     contador: contadorg_m generic map (M => 100000000) port map (clock, s_reset, s_reset, move, open, fim_mover, open);
-    
+
     medidor_distancias: interface_hcsr04 port map (clock, s_reset, medir, echo, trigger, s_medida, fim_medir, db_estado_medidor);
 
     updown: contadorg_updown_m generic map (M => 8) port map (clock, s_reset, s_reset, move_pulso, s_posicao, open, open, open);
 
     servo: controle_servo_3 port map(clock, s_reset, s_posicao, pwm, open, s_db_pwm, open);
 
-    memoria_angulos:  rom_8x24 port map (s_posicao, s_angulo); 
+    memoria_angulos:  rom_8x24 port map (s_posicao, s_angulo);
 
     dados_sonar: tx_dados_sonar port map (clock, s_reset, transmitir, s_angulo(19  downto 16), s_angulo(11  downto 8), s_angulo(3  downto 0), s_medida(11 downto 8), s_medida(7 downto 4), s_medida(3 downto 0), saida_serial, fim_transmissao, s_db_transmitir, s_db_saida_serial, db_estado_transmissor, s_db_estado_tx, s_db_estado_rx, s_db_dado_tx, s_db_dado_rx);
 
@@ -149,9 +149,8 @@ begin
     depurador_mux: mux_4x1_n generic map (BITS => 24) port map (depurador_servo_medidor, depurador_uart, depurador_tx_dados_sonar, depurador_sonar, depurador, saida_db);
 
     with s_medida(7 downto 4) select
-        alerta_proximidade <= '1' when "0001", 
-                              '1' when "0000", 
+        alerta_proximidade <= '1' when "0001",
+                              '1' when "0000",
                               '0' when others;
-    
-end architecture;
 
+end architecture;
