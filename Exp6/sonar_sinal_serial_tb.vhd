@@ -44,13 +44,13 @@ architecture tb_serial of sonar_sinal_serial_tb is
   constant casos_teste : casos_teste_array :=
       (
         -- A primeira coisa que o sistema faz é se mover, então vai direto para a posição 2!
-        (1, 588 us, "00110000", "00110001", "00110000", "00110000", "00110010", "00110000"),   -- distancia de 10cm, ângulo de 020
-        (2, 882 us, "00110000", "00110001", "00110101", "00110000", "00110100", "00110000"),   -- distancia de 15cm, ângulo de 040
-        (3, 1353 us, "00110000", "00110010", "00110011", "00110000", "00110010", "00110011"),  -- distancia de 23cm, ângulo de 060
-        (4, 236 us, "00110000", "00110000", "00110100", "00110000", "00110000", "00110010"),   -- distancia de 4cm, ângulo de 080
-        (5, 17640 us, "00110011", "00110000", "00110000", "00110011", "00110000", "00110000"), -- distancia de 300cm, ângulo de 100
-        (6, 22403 us, "00110011", "00111000", "00110001", "00110011", "00111000", "00110001"), -- distancia de 381cm, ângulo de 120
-        (6, 1764 us, "00110000", "00110011", "00110000", "00110000", "00110011", "00110000")   -- distancia de 30cm, ângulo de 140
+        (1, 588 us, "00110000", "00110001", "00110000", "00110000", "00110100", "00110000"),   -- distancia de 10cm, ângulo de 040
+        (2, 882 us, "00110000", "00110001", "00110101", "00110000", "00110110", "00110000"),   -- distancia de 15cm, ângulo de 060
+        (3, 1353 us, "00110000", "00110010", "00110011", "00110000", "00111000", "00110000"),  -- distancia de 23cm, ângulo de 080
+        (4, 236 us, "00110000", "00110000", "00110100", "00110001", "00110000", "00110000"),   -- distancia de 4cm, ângulo de 100
+        (5, 17640 us, "00110011", "00110000", "00110000", "00110001", "00110010", "00110000"), -- distancia de 300cm, ângulo de 120
+        (6, 22403 us, "00110011", "00111000", "00110001", "00110001", "00110100", "00110000"), -- distancia de 381cm, ângulo de 140
+        (6, 1764 us, "00110000", "00110011", "00110000", "00110001", "00110110", "00110000")   -- distancia de 30cm, ângulo de 160
       );
 
 begin
@@ -98,9 +98,9 @@ begin
         wait until saida_serial_out'event and saida_serial_out = '0'; -- Start bit
         wait for 0.5 * tempo_transmissao_bit; -- Pegar metade do sinal
         for b in 0 to 7 loop
-          wait tempo_transmissao_bit;
+          wait for tempo_transmissao_bit;
           assert saida_serial_out = casos_teste(i).angulo_0(b)
-          report "Falha no bit " & integer'image(b) & "da angulo 0, no teste " & integer'image(i)
+          report "Falha no bit " & integer'image(b) & " do angulo 0, no teste " & integer'image(i)
           severity error;
         end loop;
 
@@ -108,9 +108,9 @@ begin
         wait until saida_serial_out'event and saida_serial_out = '0'; -- Start bit
         wait for 0.5 * tempo_transmissao_bit; -- Pegar metade do sinal
         for b in 0 to 7 loop
-          wait tempo_transmissao_bit;
+          wait for tempo_transmissao_bit;
           assert saida_serial_out = casos_teste(i).angulo_1(b)
-          report "Falha no bit " & integer'image(b) & "da angulo 1, no teste " & integer'image(i)
+          report "Falha no bit " & integer'image(b) & " do angulo 1, no teste " & integer'image(i)
           severity error;
         end loop;
 
@@ -118,9 +118,9 @@ begin
         wait until saida_serial_out'event and saida_serial_out = '0'; -- Start bit
         wait for 0.5 * tempo_transmissao_bit; -- Pegar metade do sinal
         for b in 0 to 7 loop
-          wait tempo_transmissao_bit;
+          wait for tempo_transmissao_bit;
           assert saida_serial_out = casos_teste(i).angulo_2(b)
-          report "Falha no bit " & integer'image(b) & "da angulo 2, no teste " & integer'image(i)
+          report "Falha no bit " & integer'image(b) & " do angulo 2, no teste " & integer'image(i)
           severity error;
         end loop;
 
@@ -128,9 +128,9 @@ begin
         wait until saida_serial_out'event and saida_serial_out = '0'; -- Start bit
         wait for 0.5 * tempo_transmissao_bit; -- Pegar metade do sinal
         for b in 0 to 7 loop
-          wait tempo_transmissao_bit;
+          wait for tempo_transmissao_bit;
           assert saida_serial_out = virgula(b)
-          report "Falha no bit " & integer'image(b) & "da virgula, no teste " & integer'image(i)
+          report "Falha no bit " & integer'image(b) & " da virgula, no teste " & integer'image(i)
           severity error;
         end loop;
 
@@ -138,9 +138,9 @@ begin
         wait until saida_serial_out'event and saida_serial_out = '0'; -- Start bit
         wait for 0.5 * tempo_transmissao_bit; -- Pegar metade do sinal
         for b in 0 to 7 loop
-          wait tempo_transmissao_bit;
+          wait for tempo_transmissao_bit;
           assert saida_serial_out = casos_teste(i).distancia_0(b)
-          report "Falha no bit " & integer'image(b) & "da distancia 0, no teste " & integer'image(i)
+          report "Falha no bit " & integer'image(b) & " da distancia 0, no teste " & integer'image(i)
           severity error;
         end loop;
 
@@ -148,9 +148,9 @@ begin
         wait until saida_serial_out'event and saida_serial_out = '0'; -- Start bit
         wait for 0.5 * tempo_transmissao_bit; -- Pegar metade do sinal
         for b in 0 to 7 loop
-          wait tempo_transmissao_bit;
+          wait for tempo_transmissao_bit;
           assert saida_serial_out = casos_teste(i).distancia_1(b)
-          report "Falha no bit " & integer'image(b) & "da distancia 1, no teste " & integer'image(i)
+          report "Falha no bit " & integer'image(b) & " da distancia 1, no teste " & integer'image(i)
           severity error;
         end loop;
 
@@ -158,9 +158,9 @@ begin
         wait until saida_serial_out'event and saida_serial_out = '0'; -- Start bit
         wait for 0.5 * tempo_transmissao_bit; -- Pegar metade do sinal
         for b in 0 to 7 loop
-          wait tempo_transmissao_bit;
+          wait for tempo_transmissao_bit;
           assert saida_serial_out = casos_teste(i).distancia_2(b)
-          report "Falha no bit " & integer'image(b) & "da distancia 2, no teste " & integer'image(i)
+          report "Falha no bit " & integer'image(b) & " da distancia 2, no teste " & integer'image(i)
           severity error;
         end loop;
 
@@ -168,9 +168,9 @@ begin
         wait until saida_serial_out'event and saida_serial_out = '0'; -- Start bit
         wait for 0.5 * tempo_transmissao_bit; -- Pegar metade do sinal
         for b in 0 to 7 loop
-          wait tempo_transmissao_bit;
+          wait for tempo_transmissao_bit;
           assert saida_serial_out = ponto(b)
-          report "Falha no bit " & integer'image(b) & "do ponto, no teste " & integer'image(i)
+          report "Falha no bit " & integer'image(b) & " do ponto, no teste " & integer'image(i)
           severity error;
         end loop;
 
