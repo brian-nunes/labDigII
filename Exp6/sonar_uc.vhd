@@ -62,7 +62,7 @@ architecture sonar_uc_arch of sonar_uc is
      mede <= '1' when mede_distancia, '0' when others;
 
     with Eatual select
-     transmite <= '1' when move_servo, '0' when others;
+     transmite <= '1' when transmite_dado, '0' when others;
 
     -- Debug Estado (pro Display)
     with Eatual select

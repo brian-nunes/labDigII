@@ -23,7 +23,7 @@ architecture tb_servo of sonar_controle_servo_tb is
   signal depurador_out : std_logic_vector(23 downto 0);
 
   signal keep_simulating: std_logic := '0';
-  constant clockPeriod: time := 1 ns;
+  constant clockPeriod: time := 20 ns;
 
   type caso_teste_type is record
       id     : natural;
@@ -35,7 +35,7 @@ architecture tb_servo of sonar_controle_servo_tb is
   type casos_teste_array is array (natural range <>) of caso_teste_type;
   constant casos_teste : casos_teste_array :=
       (
-        (1, 990 us),   -- pulso de 1ms
+        -- A primeira coisa que o sistema faz é se mover, então vai direto para a posição 2
         (2, 1133 us),  -- pulso de 1,143ms
         (3, 1276 us),  -- pulso de 1,286ms
         (4, 1419 us),  -- pulso de 1,429ms
@@ -86,21 +86,27 @@ begin
     ligar_in <= '1';
 
     for i in casos_teste'range loop
-        -- imprime caso e largura do pulso em us
-        assert false report "Caso de teste " & integer'image(casos_teste(i).id) severity note;
+      -- imprime caso e largura do pulso em us
+      assert false report "Caso de teste " & integer'image(casos_teste(i).id) severity note;
 
-        wait until pwm_out'event and pwm_out = '1';
-        wait for casos_teste(i).largura_de_pulso;
-        assert pwm_out = '1' report "Falha na duracao. Teste: " & integer'image(casos_teste(i).id) severity error;
-        wait for 11 us;
-        assert pwm_out = '0' report "Falha no desativamento. Teste: " & integer'image(casos_teste(i).id) severity error;
+      wait until pwm_out'event and pwm_out = '1';
+      wait for casos_teste(i).largura_de_pulso;
+      assert pwm_out = '1' report "Falha na duracao. Teste: " & integer'image(casos_teste(i).id) severity error;
+      wait for 11 us;
+      assert pwm_out = '0' report "Falha no desativamento. Teste: " & integer'image(casos_teste(i).id) severity error;
 
-        wait until trigger_out'event and trigger_out = '1';
-        wait for 10 ms;
+      assert false report "Fim do teste " & integer'image(casos_teste(i).id) severity note;
+
+      wait until trigger_out'event and trigger_out = '1';
+      wait for 10 ms;
+
+      echo_in <= '1';
+      wait for 588 us;
+      echo_in <= '0';
+
+      wait for 5 ms; -- aguarda tempo de transmissão
 
     end loop;
-
-    wait until pwm_out'event and pwm_out = '1';
 
     assert false report "Fim dos testes" severity note;
     keep_simulating <= '0';
