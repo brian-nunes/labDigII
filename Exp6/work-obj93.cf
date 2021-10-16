@@ -1,67 +1,94 @@
-v 4
-file . ".\sonar_fd.vhd" "8f61fc53831127765a18a744d0825e5f4c2b378b" "20211015175929.698":
-  entity sonar_fd at 1( 0) + 0 on 1035;
-  architecture sonar_fd_arch of sonar_fd at 16( 515) + 0 on 1036;
-file . ".\contadorg_m.vhd" "379546c2ca0e50fa1c64aed27a792c217fda3738" "20211013141949.975":
-  entity contadorg_m at 19( 973) + 0 on 561;
-  architecture comportamental of contadorg_m at 35( 1384) + 0 on 562;
-file . ".\teste_tx_dados_sonar_tb.vhd" "b610c8ed5c005377d86ee010793965be9aab46c1" "20211015135339.784":
-  entity teste_tx_dados_sonar_tb at 1( 0) + 0 on 1023;
-  architecture tb of teste_tx_dados_sonar_tb at 7( 114) + 0 on 1024;
-file . ".\tx_dados_sonar.vhd" "597d6a6aa527f24f27ac27d8be669cfa63d9e5dc" "20211015175815.057":
-  entity tx_dados_sonar at 1( 0) + 0 on 1033;
-  architecture tx_dados_sonar_arch of tx_dados_sonar at 29( 1107) + 0 on 1034;
-file . ".\tx_dados_sonar_fd.vhd" "c66b756b4687da78635edb65dafae0c81d135140" "20211015175812.686":
-  entity tx_dados_sonar_fd at 1( 0) + 0 on 1031;
-  architecture tx_dados_sonar_fd_arch of tx_dados_sonar_fd at 24( 1138) + 0 on 1032;
-file . ".\tx_serial_8N2.vhd" "542989562522fc1bc0e66655a51736f223fefbc7" "20211015134755.298":
-  entity tx_serial_8n2 at 1( 0) + 0 on 1007;
-  architecture tx_serial_8n2_arch of tx_serial_8n2 at 15( 357) + 0 on 1008;
-file . ".\rx_serial_8N2_fd.vhd" "d91dec8c59af47202341d0f57663bb24778b236c" "20211015134755.092":
-  entity rx_serial_8n2_fd at 1( 0) + 0 on 997;
-  architecture rx_serial_8n2_fd_arch of rx_serial_8n2_fd at 15( 503) + 0 on 998;
-file . ".\registrador_n.vhd" "1032b2d88965cf51d8beccab4a5d1736dd8c6024" "20211015134755.012":
-  entity registrador_n at 19( 950) + 0 on 993;
-  architecture registrador_n of registrador_n at 35( 1318) + 0 on 994;
-file . ".\rx_serial_tick_uc.vhd" "1210d6cf95b10f741f1cd132688e6d1050129d5d" "20211015134754.928":
-  entity rx_serial_tick_uc at 1( 0) + 0 on 989;
-  architecture rx_serial_tick_uc_arch of rx_serial_tick_uc at 13( 382) + 0 on 990;
-file . ".\deslocador_n.vhd" "2d9dccea45a4e0ae3229bad75c201711b27b2534" "20211015134755.217":
-  entity deslocador_n at 19( 801) + 0 on 1003;
-  architecture deslocador_n_arch of deslocador_n at 34( 1247) + 0 on 1004;
-file . ".\tx_serial_8N2_fd.vhd" "a1e7afac72eca0e67c5fcb6072d4becbc45bcef6" "20211015134755.258":
-  entity tx_serial_8n2_fd at 1( 0) + 0 on 1005;
-  architecture tx_serial_8n2_fd_arch of tx_serial_8n2_fd at 14( 376) + 0 on 1006;
-file . ".\mux_8x1_n.vhd" "737259b25eab9c57f23fe4a2321974dcc923d5ac" "20211015134754.881":
-  entity mux_8x1_n at 15( 685) + 0 on 987;
-  architecture behav of mux_8x1_n at 36( 1423) + 0 on 988;
-file . ".\edge_detector.vhd" "fd2491f6333432110cb7cf13dc8cfaa897d02891" "20211015134754.697":
-  entity edge_detector at 17( 719) + 0 on 983;
-  architecture behavioral of edge_detector at 27( 946) + 0 on 984;
-file . ".\tx_dados_sonar_uc.vhd" "f26506a11452dee21d1a5501b1725eafdf6cd39c" "20211015134754.789":
-  entity tx_dados_sonar_uc at 1( 0) + 0 on 985;
-  architecture tx_dados_sonar_uc_arch of tx_dados_sonar_uc at 14( 419) + 0 on 986;
-file . ".\contador_m.vhd" "f17be4e46f84884d1f7952a2d14c538470718498" "20211015134755.050":
-  entity contador_m at 18( 751) + 0 on 995;
-  architecture contador_m_arch of contador_m at 34( 1152) + 0 on 996;
-file . ".\tx_serial_tick_uc.vhd" "4d6f24326ba3dbd14e1eba9e2dcc97ee4bfbc7d5" "20211015134755.173":
-  entity tx_serial_tick_uc at 1( 0) + 0 on 1001;
-  architecture tx_serial_tick_uc_arch of tx_serial_tick_uc at 12( 320) + 0 on 1002;
-file . ".\registrador_deslocamento_n.vhd" "63b48e9e9356825bad699d5c289c483624833767" "20211015134754.972":
-  entity registrador_deslocamento_n at 1( 0) + 0 on 991;
-  architecture registrador_deslocamento_n_arch of registrador_deslocamento_n at 16( 453) + 0 on 992;
-file . ".\rx_serial_8N2.vhd" "76726d35b17214406a6840a52a4706f0b0c6c7aa" "20211015134755.135":
-  entity rx_serial_8n2 at 6( 175) + 0 on 999;
-  architecture rx_serial_8n2_arch of rx_serial_8n2 at 24( 646) + 0 on 1000;
-file . ".\uart_8N2.vhd" "d33cff8376a664eafdfe09e57bfb54a6762cf564" "20211015134755.339":
-  entity uart_8n2 at 1( 0) + 0 on 1009;
-  architecture uart_8n2_arch of uart_8n2 at 28( 877) + 0 on 1010;
-file . ".\teste_tx_dados_sonar.vhd" "f97817cc1d12b53ea8d4528e0b8d3ec04aefcac9" "20211015134755.462":
-  entity teste_tx_dados_sonar at 1( 0) + 0 on 1015;
-  architecture teste_tx_dados_sonar_arch of teste_tx_dados_sonar at 19( 467) + 0 on 1016;
-file . ".\sonar_uc.vhd" "33c3033e8d5b66858db238965cd9d1b9fc7ef9d7" "20211015172455.926":
-  entity sonar_uc at 1( 0) + 0 on 1025;
-  architecture sonar_uc_arch of sonar_uc at 13( 338) + 0 on 1026;
-file . ".\sonar.vhd" "e6d31192b0c07ec4780bc8362c778fd478d41d55" "20211015180132.641":
-  entity sonar at 1( 0) + 0 on 1039;
-  architecture sonar_arch of sonar at 15( 387) + 0 on 1040;
+v 3
+file . "sonar.vhd" "20211015203302.000" "20211016103641.864":
+  entity sonar at 1( 0) + 0 on 69;
+  architecture sonar_arch of sonar at 15( 387) + 0 on 70;
+file . "sonar_uc.vhd" "20211015203302.000" "20211016103641.785":
+  entity sonar_uc at 1( 0) + 0 on 65;
+  architecture sonar_uc_arch of sonar_uc at 13( 338) + 0 on 66;
+file . "tx_dados_sonar_fd.vhd" "20211015203302.000" "20211016103641.701":
+  entity tx_dados_sonar_fd at 1( 0) + 0 on 61;
+  architecture tx_dados_sonar_fd_arch of tx_dados_sonar_fd at 24( 1138) + 0 on 62;
+file . "uart_8N2.vhd" "20211015203302.000" "20211016103641.630":
+  entity uart_8n2 at 1( 0) + 0 on 57;
+  architecture uart_8n2_arch of uart_8n2 at 28( 877) + 0 on 58;
+file . "rx_serial_8N2_fd.vhd" "20211015203302.000" "20211016103641.554":
+  entity rx_serial_8n2_fd at 1( 0) + 0 on 53;
+  architecture rx_serial_8n2_fd_arch of rx_serial_8n2_fd at 15( 503) + 0 on 54;
+file . "tx_serial_8N2.vhd" "20211015203302.000" "20211016103641.479":
+  entity tx_serial_8n2 at 1( 0) + 0 on 49;
+  architecture tx_serial_8n2_arch of tx_serial_8n2 at 15( 357) + 0 on 50;
+file . "tx_serial_tick_uc.vhd" "20211015203302.000" "20211016103641.410":
+  entity tx_serial_tick_uc at 1( 0) + 0 on 45;
+  architecture tx_serial_tick_uc_arch of tx_serial_tick_uc at 12( 320) + 0 on 46;
+file . "interface_hcsr04_fd.vhd" "20211015203302.000" "20211016103641.335":
+  entity interface_hcsr04_fd at 1( 0) + 0 on 41;
+  architecture interface_hcsr04_fd_arch of interface_hcsr04_fd at 14( 336) + 0 on 42;
+file . "hex7seg.vhd" "20211015203302.000" "20211016103641.251":
+  entity hex7seg at 14( 582) + 0 on 37;
+  architecture comportamental of hex7seg at 24( 782) + 0 on 38;
+file . "deslocador_n.vhd" "20211015203302.000" "20211016103641.169":
+  entity deslocador_n at 19( 801) + 0 on 33;
+  architecture deslocador_n_arch of deslocador_n at 34( 1247) + 0 on 34;
+file . "controle_servo_3.vhd" "20211015203302.000" "20211016103641.062":
+  entity controle_servo_3 at 8( 171) + 0 on 29;
+  architecture rtl of controle_servo_3 at 24( 581) + 0 on 30;
+file . "contador_bcd_4digitos.vhd" "20211015203302.000" "20211016103640.979":
+  entity contador_bcd_4digitos at 18( 829) + 0 on 25;
+  architecture comportamental of contador_bcd_4digitos at 29( 1146) + 0 on 26;
+file . "mux_8x1_n.vhd" "20211015203302.000" "20211016103640.892":
+  entity mux_8x1_n at 15( 685) + 0 on 21;
+  architecture behav of mux_8x1_n at 36( 1423) + 0 on 22;
+file . "edge_detector.vhd" "20211015203302.000" "20211016103640.815":
+  entity edge_detector at 17( 719) + 0 on 17;
+  architecture behavioral of edge_detector at 27( 946) + 0 on 18;
+file . "contadorg_updown_m.vhd" "20211015203302.000" "20211016103640.730":
+  entity contadorg_updown_m at 21( 931) + 0 on 13;
+  architecture comportamental of contadorg_updown_m at 42( 1505) + 0 on 14;
+file . "contadorg_m.vhd" "20211015203302.000" "20211016103640.673":
+  entity contadorg_m at 19( 973) + 0 on 11;
+  architecture comportamental of contadorg_m at 35( 1384) + 0 on 12;
+file . "rom_8x24.vhd" "20211015203302.000" "20211016103640.771":
+  entity rom_8x24 at 15( 749) + 0 on 15;
+  architecture rom_arch of rom_8x24 at 26( 985) + 0 on 16;
+file . "mux_4x1_n.vhd" "20211015203302.000" "20211016103640.851":
+  entity mux_4x1_n at 15( 685) + 0 on 19;
+  architecture behav of mux_4x1_n at 32( 1191) + 0 on 20;
+file . "registrador_n.vhd" "20211015203302.000" "20211016103640.932":
+  entity registrador_n at 19( 950) + 0 on 23;
+  architecture registrador_n of registrador_n at 35( 1318) + 0 on 24;
+file . "gerador_pulso.vhd" "20211015203302.000" "20211016103641.019":
+  entity gerador_pulso at 16( 657) + 0 on 27;
+  architecture fsm_arch of gerador_pulso at 34( 1024) + 0 on 28;
+file . "contador_m.vhd" "20211015203302.000" "20211016103641.125":
+  entity contador_m at 18( 751) + 0 on 31;
+  architecture contador_m_arch of contador_m at 34( 1152) + 0 on 32;
+file . "registrador_deslocamento_n.vhd" "20211015203302.000" "20211016103641.212":
+  entity registrador_deslocamento_n at 1( 0) + 0 on 35;
+  architecture registrador_deslocamento_n_arch of registrador_deslocamento_n at 16( 453) + 0 on 36;
+file . "interface_hcsr04_uc.vhd" "20211015203302.000" "20211016103641.292":
+  entity interface_hcsr04_uc at 1( 0) + 0 on 39;
+  architecture interface_hcsr04_uc_arch of interface_hcsr04_uc at 13( 339) + 0 on 40;
+file . "interface_hcsr04.vhd" "20211015203302.000" "20211016103641.376":
+  entity interface_hcsr04 at 1( 0) + 0 on 43;
+  architecture arch_interface_hcsr04 of interface_hcsr04 at 16( 382) + 0 on 44;
+file . "tx_serial_8N2_fd.vhd" "20211015203302.000" "20211016103641.444":
+  entity tx_serial_8n2_fd at 1( 0) + 0 on 47;
+  architecture tx_serial_8n2_fd_arch of tx_serial_8n2_fd at 14( 376) + 0 on 48;
+file . "rx_serial_tick_uc.vhd" "20211015203302.000" "20211016103641.513":
+  entity rx_serial_tick_uc at 1( 0) + 0 on 51;
+  architecture rx_serial_tick_uc_arch of rx_serial_tick_uc at 13( 382) + 0 on 52;
+file . "rx_serial_8N2.vhd" "20211015203302.000" "20211016103641.591":
+  entity rx_serial_8n2 at 6( 175) + 0 on 55;
+  architecture rx_serial_8n2_arch of rx_serial_8n2 at 24( 646) + 0 on 56;
+file . "tx_dados_sonar_uc.vhd" "20211015203302.000" "20211016103641.664":
+  entity tx_dados_sonar_uc at 1( 0) + 0 on 59;
+  architecture tx_dados_sonar_uc_arch of tx_dados_sonar_uc at 14( 419) + 0 on 60;
+file . "tx_dados_sonar.vhd" "20211015203302.000" "20211016103641.746":
+  entity tx_dados_sonar at 1( 0) + 0 on 63;
+  architecture tx_dados_sonar_arch of tx_dados_sonar at 29( 1107) + 0 on 64;
+file . "sonar_fd.vhd" "20211015203302.000" "20211016103641.827":
+  entity sonar_fd at 1( 0) + 0 on 67;
+  architecture sonar_fd_arch of sonar_fd at 16( 515) + 0 on 68;
+file . "sonar_controle_servo_tb.vhd" "20211016144222.000" "20211016114224.302":
+  entity sonar_controle_servo_tb at 1( 0) + 0 on 97;
+  architecture tb_servo of sonar_controle_servo_tb at 9( 149) + 0 on 98;
