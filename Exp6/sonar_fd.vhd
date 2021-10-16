@@ -129,6 +129,7 @@ begin
 
     detector_borda: edge_detector port map (clock, move, move_pulso);
 
+    -- Reduzido para testes, lembrar de mudar para FPGA (10000 para testes e deve estar em 100000000 para FPGA)
     contador: contadorg_m generic map (M => 100000000) port map (clock, s_reset, s_reset, move, open, fim_mover, open);
     
     medidor_distancias: interface_hcsr04 port map (clock, s_reset, medir, echo, trigger, s_medida, fim_medir, db_estado_medidor);

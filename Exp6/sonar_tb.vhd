@@ -11,10 +11,12 @@ architecture tb of sonar_tb is
               reset              : in std_logic;
               ligar              : in std_logic;
               echo               : in std_logic;
+              seletor_depurador: in std_logic_vector(1 downto 0);
               trigger            : out std_logic;
               pwm                : out std_logic;
               saida_serial       : out std_logic;
-              alerta_proximidade : out std_logic);
+              alerta_proximidade : out std_logic;
+              depurador: out std_logic_vector(23 downto 0));
     end component;
 
     signal clock              : std_logic;
@@ -25,6 +27,8 @@ architecture tb of sonar_tb is
     signal pwm                : std_logic;
     signal saida_serial       : std_logic;
     signal alerta_proximidade : std_logic;
+    signal seletor_depurador  : std_logic_vector(1 downto 0);
+    signal depurador          : std_logic_vector(23 downto 0);
 
     constant TbPeriod : time := 20 ns; -- EDIT Put right period here
     signal TbClock : std_logic := '0';
@@ -37,10 +41,12 @@ begin
               reset              => reset,
               ligar              => ligar,
               echo               => echo,
+              seletor_depurador  => seletor_depurador,
               trigger            => trigger,
               pwm                => pwm,
               saida_serial       => saida_serial,
-              alerta_proximidade => alerta_proximidade);
+              alerta_proximidade => alerta_proximidade,
+              depurador          => depurador);
 
     -- Clock generation
     TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
@@ -53,6 +59,7 @@ begin
         -- EDIT Adapt initialization as needed
         ligar <= '0';
         echo <= '0';
+        seletor_depurador <= "11";
 
         -- Reset generation
         -- EDIT: Check that reset is really your reset signal
@@ -62,14 +69,21 @@ begin
         wait for 100 ns;
 
         ligar <= '1';
-        -- wait for 2000000 ns;
+        wait for 250000 ns;
         echo <= '1';
-        wait for 588000 ns;
+        wait for 108800 ns;
         echo <= '0';
 
 
         -- EDIT Add stimuli here
-        wait for 50000 * TbPeriod;
+        wait for 540000 * TbPeriod;
+
+        echo <= '1';
+        wait for 158800 ns;
+        echo <= '0';
+
+        -- EDIT Add stimuli here
+        wait for 540000 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation
         TbSimEnded <= '1';
