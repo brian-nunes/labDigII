@@ -148,7 +148,7 @@ begin
     depurador_sonar <= estado & "00000000" & s_angulo(19  downto 16) & s_angulo(11  downto 8) & s_angulo(3  downto 0);
     depurador_mux: mux_4x1_n generic map (BITS => 24) port map (depurador_servo_medidor, depurador_uart, depurador_tx_dados_sonar, depurador_sonar, depurador, saida_db);
 
-    alerta_proximidade <= '1' when s_medida(11 downto 8) = "0000" and (s_medida(7 downto 4) = "0000" or s_medida(7 downto 4) = "0001"),
-                          '0' when others;
+    alerta_proximidade <= '1' when (s_medida(11 downto 8) = "0000" and (s_medida(7 downto 4) = "0000" or s_medida(7 downto 4) = "0001")) else
+                          '0';
 
 end architecture;
