@@ -7,7 +7,7 @@ ENTITY gaiola_fd IS
         echo, medir, transmitir : IN STD_LOGIC;
         posicao_servo : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         estado: IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-        trigger, distancia_serial, fim_medir, fim_transmitir, pwm : OUT STD_LOGIC;
+        trigger, saida_serial, fim_medir, fim_transmitir, pwm : OUT STD_LOGIC;
         distancia_bcd : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
     );
 END ENTITY;
@@ -70,7 +70,7 @@ servo: controle_servo_3 port map (clock, reset, posicao_servo, pwm, open, open, 
 
 hcsr04: interface_hcsr04 port map (clock, reset, s_medir_pulso, echo, trigger, s_distancia_bcd, fim_medir, open);
 
-uart: uart_dados_gaiola port map (clock, reset, transmitir, estado, s_distancia_bcd(11 downto 8), s_distancia_bcd(7 downto 4), s_distancia_bcd(3 downto 0), distancia_serial, fim_transmitir, open);
+uart: uart_dados_gaiola port map (clock, reset, transmitir, estado, s_distancia_bcd(11 downto 8), s_distancia_bcd(7 downto 4), s_distancia_bcd(3 downto 0), saida_serial, fim_transmitir, open);
 
 distancia_bcd <= s_distancia_bcd;
 

@@ -8,7 +8,7 @@ ENTITY gaiola IS
         echo : IN STD_LOGIC;
         trigger : OUT STD_LOGIC;
         pwm : OUT STD_LOGIC;
-        distancia_serial : OUT STD_LOGIC;
+        saida_serial : OUT STD_LOGIC;
         db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
 END ENTITY;
@@ -30,7 +30,7 @@ ARCHITECTURE arch_gaiola OF gaiola IS
             echo, medir, transmitir : IN STD_LOGIC;
             posicao_servo : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
             estado: IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-            trigger, distancia_serial, fim_medir, fim_transmitir, pwm : OUT STD_LOGIC;
+            trigger, saida_serial, fim_medir, fim_transmitir, pwm : OUT STD_LOGIC;
             distancia_bcd : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
         );
     END COMPONENT;
@@ -43,7 +43,7 @@ BEGIN
 
     UC: gaiola_uc port map (clock, reset, armar, desarmar, s_fim_medir, s_fim_transmitir, s_distancia_bcd, s_medir, s_transmitir, s_posicao_servo, s_estado);
 
-    FD: gaiola_fd port map (clock, reset, echo, s_medir, s_transmitir, s_posicao_servo, s_estado, trigger, distancia_serial, s_fim_medir, s_fim_transmitir, pwm, s_distancia_bcd);
+    FD: gaiola_fd port map (clock, reset, echo, s_medir, s_transmitir, s_posicao_servo, s_estado, trigger, saida_serial, s_fim_medir, s_fim_transmitir, pwm, s_distancia_bcd);
         
     db_estado <= s_estado;
 
