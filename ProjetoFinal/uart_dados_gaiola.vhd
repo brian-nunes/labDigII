@@ -19,7 +19,7 @@ entity uart_dados_gaiola is
 end entity;
 
 architecture uart_dados_gaiola_arch of uart_dados_gaiola is
-    component tx_dados_sonar_uc
+    component uart_dados_gaiola_uc
         port(
             clock, reset, transmitir, fim_transmissao: in  std_logic;
             pronto, transmite_dado:                   out std_logic;
@@ -28,7 +28,7 @@ architecture uart_dados_gaiola_arch of uart_dados_gaiola is
         );
     end component;
 
-    component tx_dados_sonar_fd
+    component uart_dados_gaiola_fd
         port(
           clock, reset, transmitir:      in  std_logic;
           estado:                      in std_logic_vector(3 downto 0); -- estado da gaiola
@@ -45,8 +45,8 @@ architecture uart_dados_gaiola_arch of uart_dados_gaiola is
     signal s_seletor_dado: std_logic_vector(1 downto 0);
 begin
 
-    UC: tx_dados_sonar_uc port map (clock, reset, transmitir, s_fim_transmissao, pronto, s_transmitir_dado, s_seletor_dado, db_estado);
+    UC: uart_dados_gaiola_uc port map (clock, reset, transmitir, s_fim_transmissao, pronto, s_transmitir_dado, s_seletor_dado, db_estado);
 
-    FD: tx_dados_sonar_fd port map (clock, reset, s_transmitir_dado, estado, distancia2, distancia1, distancia0, s_seletor_dado, s_fim_transmissao, saida_serial);
+    FD: uart_dados_gaiola_fd port map (clock, reset, s_transmitir_dado, estado, distancia2, distancia1, distancia0, s_seletor_dado, s_fim_transmissao, saida_serial);
 
 end architecture;
