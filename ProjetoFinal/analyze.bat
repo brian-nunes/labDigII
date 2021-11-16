@@ -1,4 +1,5 @@
 ghdl -a contadorg_m.vhd
+ghdl -a contador_m.vhd
 ghdl -a mux_4x1_n.vhd
 ghdl -a contador_bcd_4digitos.vhd
 ghdl -a deslocador_n.vhd

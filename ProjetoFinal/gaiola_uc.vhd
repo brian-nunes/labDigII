@@ -4,9 +4,9 @@ USE ieee.numeric_std.ALL;
 
 ENTITY gaiola_uc IS
     PORT (
-        clock, reset, armar, desarmar, fim_medir, fim_transmitir : IN STD_LOGIC;
+        clock, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera : IN STD_LOGIC;
         distancia_bcd : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
-        medir, transmitir : OUT STD_LOGIC;
+        medir, transmitir, reset_interface, conta_espera : OUT STD_LOGIC;
         posicao_servo : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
         db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
@@ -14,7 +14,7 @@ END ENTITY;
 
 ARCHITECTURE gaiola_uc_arch OF gaiola_uc IS
 
-    TYPE tipo_estado IS (inativo, mede, transmite, compara, fechado);
+    TYPE tipo_estado IS (inativo, mede, transmite, compara, espera, fechado);
     SIGNAL Eatual, Eprox : tipo_estado;
 
 BEGIN
@@ -30,7 +30,7 @@ BEGIN
     END PROCESS;
 
     -- logica de proximo estado
-    PROCESS (Eatual, reset, armar, desarmar, fim_medir, fim_transmitir, distancia_bcd)
+    PROCESS (Eatual, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera, distancia_bcd)
     BEGIN
         CASE Eatual IS
 
@@ -61,7 +61,15 @@ BEGIN
             ELSIF desarmar = '1' THEN
                 Eprox <= inativo;
             ELSE
-                Eprox <= compara;
+                Eprox <= espera;
+            END IF;
+
+            WHEN espera => IF fim_espera = '1' THEN
+                Eprox <= mede;
+            ELSIF desarmar = '1' THEN
+                Eprox <= inativo;
+            ELSE
+                Eprox <= espera;
             END IF;
 
             WHEN fechado => IF desarmar = '1' THEN
@@ -88,7 +96,16 @@ BEGIN
         posicao_servo <= "111" WHEN mede,
                          "111" WHEN transmite,
                          "111" WHEN compara,
+                         "111" WHEN espera,
                          "000" WHEN OTHERS;
+
+    WITH Eatual SELECT
+        reset_interface <= '1' WHEN transmite,
+                           '0' WHEN OTHERS;
+    
+    WITH Eatual SELECT
+        conta_espera <= '1' WHEN espera,
+                        '0' WHEN OTHERS;
 
     -- Debug Estado (pro Display)
     WITH Eatual SELECT
