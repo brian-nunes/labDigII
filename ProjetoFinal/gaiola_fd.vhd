@@ -73,16 +73,17 @@ ARCHITECTURE arch_gaiola_fd OF gaiola_fd IS
         );
     END COMPONENT;
 
-    SIGNAL s_medir_pulso, s_reset : STD_LOGIC;
+    SIGNAL s_medir_pulso, s_reset, s_reset_interface : STD_LOGIC;
     SIGNAL s_distancia_bcd : STD_LOGIC_VECTOR(11 DOWNTO 0);
 BEGIN
     s_reset <= reset;
+    s_reset_interface <= s_reset OR reset_interface;
 
     edge_medir : edge_detector PORT MAP(clock, medir, s_medir_pulso);
 
     servo : controle_servo_3 PORT MAP(clock, s_reset, posicao_servo, pwm, OPEN, OPEN, OPEN);
 
-    hcsr04 : interface_hcsr04 PORT MAP(clock, reset_interface, s_medir_pulso, echo, trigger, s_distancia_bcd, fim_medir, OPEN);
+    hcsr04 : interface_hcsr04 PORT MAP(clock, s_reset_interface, s_medir_pulso, echo, trigger, s_distancia_bcd, fim_medir, OPEN);
 
     uart : uart_dados_gaiola PORT MAP(clock, s_reset, transmitir, estado, s_distancia_bcd(11 DOWNTO 8), s_distancia_bcd(7 DOWNTO 4), s_distancia_bcd(3 DOWNTO 0), saida_serial, fim_transmitir, OPEN);
 

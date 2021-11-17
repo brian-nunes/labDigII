@@ -64,7 +64,7 @@ begin
     s_distancia1 <= const_001 & distancia1;
     s_distancia0 <= const_001 & distancia0;
 
-    mux: mux_4x1_n generic map (BITS => 8) port map (s_estado, s_distancia0, s_distancia1, s_distancia2, seletor_dado, saida_mux);
+    mux: mux_4x1_n generic map (BITS => 8) port map (s_estado, s_distancia2, s_distancia1, s_distancia0, seletor_dado, saida_mux);
 
     transmissor: uart_8N2 port map (clock, reset, transmitir, saida_mux, rx_serial_pino, rx_serial_pino, saida_serial, fim_transmissao, open, open, open, open, open, open, open, open, open);
     
