@@ -102,7 +102,7 @@ BEGIN
     WITH Eatual SELECT
         reset_interface <= '1' WHEN transmite,
                            '0' WHEN OTHERS;
-    
+
     WITH Eatual SELECT
         conta_espera <= '1' WHEN espera,
                         '0' WHEN OTHERS;
@@ -113,6 +113,7 @@ BEGIN
                      "0001" WHEN mede, -- 1
                      "0010" WHEN transmite, -- 2
                      "0011" WHEN compara, -- 3
-                     "0100" WHEN fechado, -- 4
+                     "0100" WHEN espera, -- 4
+                     "0101" WHEN fechado, -- 5
                      "1111" WHEN OTHERS; -- F
 END ARCHITECTURE;

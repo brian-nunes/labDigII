@@ -9,7 +9,8 @@ ENTITY gaiola IS
         trigger : OUT STD_LOGIC;
         pwm : OUT STD_LOGIC;
         saida_serial : OUT STD_LOGIC;
-        db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+        db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        db_distancia: OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
     );
 END ENTITY;
 
@@ -46,5 +47,6 @@ BEGIN
     FD : gaiola_fd PORT MAP(clock, reset, echo, s_medir, s_transmitir, s_reset_interface, s_conta_espera, s_posicao_servo, s_estado, trigger, saida_serial, s_fim_medir, s_fim_transmitir, s_fim_espera, pwm, s_distancia_bcd);
 
     db_estado <= s_estado;
+    db_distancia <= s_distancia_bcd;
 
 END ARCHITECTURE;
