@@ -6,7 +6,8 @@ ENTITY gaiola_uc IS
     PORT (
         clock, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera : IN STD_LOGIC;
         distancia_bcd : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
-        medir, transmitir, reset_interface, conta_espera : OUT STD_LOGIC;
+        ultimo_estado : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+        medir, transmitir, reset_interface, conta_espera, salva_estado: OUT STD_LOGIC;
         posicao_servo : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
         db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
@@ -30,14 +31,15 @@ BEGIN
     END PROCESS;
 
     -- logica de proximo estado
-    PROCESS (Eatual, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera, distancia_bcd)
+    PROCESS (Eatual, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera, distancia_bcd, ultimo_estado)
     BEGIN
         CASE Eatual IS
 
             WHEN inativo => IF armar = '1' THEN
                 Eprox <= mede;
             ELSE
-                Eprox <= inativo;
+                -- Eprox <= inativo;
+                Eprox <= transmite;
             END IF;
 
             WHEN mede => IF fim_medir = '1' THEN
@@ -49,7 +51,14 @@ BEGIN
             END IF;
 
             WHEN transmite => IF fim_transmitir = '1' THEN
-                Eprox <= compara;
+                -- Eprox <= compara;
+                IF ultimo_estado = "0000" THEN
+                  Eprox <= inativo;
+                ELSIF ultimo_estado = "0101" THEN
+                  Eprox <= fechado;
+                ELSIF ultimo_estado = "0001" THEN
+                  Eprox <= compara;
+                END IF;
             ELSIF desarmar = '1' THEN
                 Eprox <= inativo;
             ELSE
@@ -75,7 +84,8 @@ BEGIN
             WHEN fechado => IF desarmar = '1' THEN
                 Eprox <= inativo;
             ELSE
-                Eprox <= fechado;
+                -- Eprox <= fechado;
+                Eprox <= transmite;
             END IF;
 
             WHEN OTHERS => Eprox <= inativo;
@@ -105,6 +115,12 @@ BEGIN
 
     WITH Eatual SELECT
         conta_espera <= '1' WHEN espera,
+                        '0' WHEN OTHERS;
+
+    WITH Eatual SELECT
+        salva_estado <= '1' WHEN inativo,
+                        '1' WHEN mede,
+                        '1' WHEN fechado,
                         '0' WHEN OTHERS;
 
     -- Debug Estado (pro Display)
