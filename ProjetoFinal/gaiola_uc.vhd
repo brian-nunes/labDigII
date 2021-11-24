@@ -5,7 +5,7 @@ USE ieee.numeric_std.ALL;
 ENTITY gaiola_uc IS
     PORT (
         clock, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera : IN STD_LOGIC;
-        distancia_bcd : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
+        distancia_bcd1, distancia_bcd2 : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
         medir, transmitir, reset_interface, conta_espera, salva_estado: OUT STD_LOGIC;
         posicao_servo : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
         db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
@@ -30,7 +30,7 @@ BEGIN
     END PROCESS;
 
     -- logica de proximo estado
-    PROCESS (Eatual, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera, distancia_bcd)
+    PROCESS (Eatual, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera, distancia_bcd1, distancia_bcd2)
     BEGIN
         CASE Eatual IS
 
@@ -62,7 +62,7 @@ BEGIN
                 Eprox <= transmite_medicao;
             END IF;
 
-            WHEN compara => IF (distancia_bcd(11 DOWNTO 8) = "0010" OR distancia_bcd(11 DOWNTO 8) = "0001" OR distancia_bcd(11 DOWNTO 8) = "0000") THEN
+            WHEN compara => IF (distancia_bcd1(11 DOWNTO 8) = "0010" OR distancia_bcd1(11 DOWNTO 8) = "0001" OR distancia_bcd1(11 DOWNTO 8) = "0000") AND NOT((distancia_bcd2(11 DOWNTO 8) = "0001" AND distancia_bcd2(7 DOWNTO 6) = "00") OR distancia_bcd2(11 DOWNTO 8) = "0000") THEN
                 Eprox <= transmite_fechado;
             ELSIF desarmar = '1' THEN
                 Eprox <= transmite_inativo;
