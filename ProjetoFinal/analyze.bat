@@ -7,6 +7,7 @@ ghdl -a edge_detector.vhd
 ghdl -a gerador_pulso.vhd
 ghdl -a registrador_deslocamento_n.vhd
 ghdl -a registrador_n.vhd
+ghdl -a hex7seg.vhd
 
 ghdl -a controle_servo_3.vhd
 
@@ -29,3 +30,5 @@ ghdl -a interface_hcsr04.vhd
 ghdl -a gaiola_uc.vhd
 ghdl -a gaiola_fd.vhd
 ghdl -a gaiola.vhd
+
+ghdl -a gaiola_com_display.vhd
