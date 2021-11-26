@@ -130,9 +130,9 @@ architecture uart_dados_gaiola_uc_arch of uart_dados_gaiola_uc is
                       "0101" when transmitedi2,
                       "0110" when transmitedi3,
 
-                      "0111" when transmitedi1,
-                      "1000" when transmitedi2,
-                      "1001" when transmitedi3,
+                      "0111" when transmitedp1,
+                      "1000" when transmitedp2,
+                      "1001" when transmitedp3,
 
                       "1010" when transmite_ponto,
                       "0000" when others;

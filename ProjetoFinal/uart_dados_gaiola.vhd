@@ -51,7 +51,7 @@ architecture uart_dados_gaiola_arch of uart_dados_gaiola is
     end component;
 
     signal s_transmitir_dado, s_fim_transmissao: std_logic;
-    signal s_seletor_dado: std_logic_vector(2 downto 0);
+    signal s_seletor_dado: std_logic_vector(3 downto 0);
 begin
 
     UC: uart_dados_gaiola_uc port map (clock, reset, transmitir, s_fim_transmissao, pronto, s_transmitir_dado, s_seletor_dado, db_estado);
