@@ -39,7 +39,7 @@ ARCHITECTURE arch_gaiola OF gaiola IS
     SIGNAL s_fim_medir, s_fim_transmitir, s_medir, s_transmitir, s_fim_espera, s_reset_interface, s_conta_espera, s_salva_estado : STD_LOGIC;
     SIGNAL s_estado : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL s_posicao_servo : STD_LOGIC_VECTOR(2 DOWNTO 0);
-    SIGNAL s_distancia_bcd1, s_db_distancia2 : STD_LOGIC_VECTOR(11 DOWNTO 0);
+    SIGNAL s_distancia_bcd1, s_distancia_bcd2 : STD_LOGIC_VECTOR(11 DOWNTO 0);
 BEGIN
 
     UC : gaiola_uc PORT MAP(clock, reset, armar, desarmar, s_fim_medir, s_fim_transmitir, s_fim_espera, s_distancia_bcd1, s_distancia_bcd2, s_medir, s_transmitir, s_reset_interface, s_conta_espera, s_salva_estado, s_posicao_servo, s_estado);

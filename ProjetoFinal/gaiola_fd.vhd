@@ -91,9 +91,9 @@ BEGIN
 
     servo : controle_servo_3 PORT MAP(clock, s_reset, posicao_servo, pwm, OPEN, OPEN, OPEN);
 
-    hcsr04 : interface_hcsr04_interno PORT MAP(clock, s_reset_interface, s_medir_pulso, echo1, trigger1, s_distancia_bcd1, fim_medir1, OPEN);
+    hcsr04_interno : interface_hcsr04 PORT MAP(clock, s_reset_interface, s_medir_pulso, echo1, trigger1, s_distancia_bcd1, fim_medir1, OPEN);
 
-    hcsr04 : interface_hcsr04_porta PORT MAP(clock, s_reset_interface, s_medir_pulso, echo2, trigger2, s_distancia_bcd2, fim_medir2, OPEN);
+    hcsr04_porta : interface_hcsr04 PORT MAP(clock, s_reset_interface, s_medir_pulso, echo2, trigger2, s_distancia_bcd2, fim_medir2, OPEN);
 
     uart : uart_dados_gaiola PORT MAP(clock, s_reset, transmitir, estado, s_distancia_interna2, s_distancia_interna1, s_distancia_interna0, s_distancia_porta2, s_distancia_porta1, s_distancia_porta0, saida_serial, fim_transmitir, OPEN);
 
