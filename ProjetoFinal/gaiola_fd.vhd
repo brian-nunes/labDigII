@@ -6,11 +6,11 @@ use ieee.math_real.all;
 ENTITY gaiola_fd IS
     PORT (
         clock, reset : IN STD_LOGIC;
-        echo, medir, transmitir, reset_interface, conta_espera, salva_estado : IN STD_LOGIC;
+        echo1, echo2, medir, transmitir, reset_interface, conta_espera, salva_estado : IN STD_LOGIC;
         posicao_servo : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         estado : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-        trigger, saida_serial, fim_medir, fim_transmitir, fim_espera, pwm : OUT STD_LOGIC;
-        distancia_bcd : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
+        trigger1, trigger2, saida_serial, fim_medir, fim_transmitir, fim_espera, pwm : OUT STD_LOGIC;
+        distancia_bcd1, distancia_bcd2 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
     );
 END ENTITY;
 
@@ -21,9 +21,15 @@ ARCHITECTURE arch_gaiola_fd OF gaiola_fd IS
             reset : IN STD_LOGIC;
             transmitir : IN STD_LOGIC;
             estado : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- estado da gaiola
-            distancia2 : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- e de distancia
-            distancia1 : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-            distancia0 : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+            distancia_interna2 : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- e de distancia
+            distancia_interna1 : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+            distancia_interna0 : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+            distancia_porta2 : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+            distancia_porta1 : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+            distancia_porta0 : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+
             saida_serial : OUT STD_LOGIC;
             pronto : OUT STD_LOGIC;
             db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
@@ -74,8 +80,9 @@ ARCHITECTURE arch_gaiola_fd OF gaiola_fd IS
     END COMPONENT;
 
     SIGNAL s_medir_pulso, s_reset, s_reset_interface : STD_LOGIC;
-    SIGNAL s_distancia_bcd : STD_LOGIC_VECTOR(11 DOWNTO 0);
-    SIGNAL s_distancia_2, s_distancia_1, s_distancia_0, s_ultimo_estado : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL s_distancia_bcd1, s_distancia_bcd2 : STD_LOGIC_VECTOR(11 DOWNTO 0);
+    SIGNAL fim_medir1, fim_medir2: STD_LOGIC;
+    SIGNAL s_distancia_interna2, s_distancia_interna1, s_distancia_interna0, s_ultimo_estado, s_distancia_porta2, s_distancia_porta1, s_distancia_porta0 : STD_LOGIC_VECTOR(3 DOWNTO 0);
 BEGIN
     s_reset <= reset;
     s_reset_interface <= s_reset OR reset_interface;
@@ -84,30 +91,49 @@ BEGIN
 
     servo : controle_servo_3 PORT MAP(clock, s_reset, posicao_servo, pwm, OPEN, OPEN, OPEN);
 
-    hcsr04 : interface_hcsr04 PORT MAP(clock, s_reset_interface, s_medir_pulso, echo, trigger, s_distancia_bcd, fim_medir, OPEN);
+    hcsr04_interno : interface_hcsr04 PORT MAP(clock, s_reset_interface, s_medir_pulso, echo1, trigger1, s_distancia_bcd1, fim_medir1, OPEN);
 
-    uart : uart_dados_gaiola PORT MAP(clock, s_reset, transmitir, estado, s_distancia_2, s_distancia_1, s_distancia_0, saida_serial, fim_transmitir, OPEN);
+    hcsr04_porta : interface_hcsr04 PORT MAP(clock, s_reset_interface, s_medir_pulso, echo2, trigger2, s_distancia_bcd2, fim_medir2, OPEN);
+
+    uart : uart_dados_gaiola PORT MAP(clock, s_reset, transmitir, estado, s_distancia_interna2, s_distancia_interna1, s_distancia_interna0, s_distancia_porta2, s_distancia_porta1, s_distancia_porta0, saida_serial, fim_transmitir, OPEN);
+
+
+    fim_medir <= fim_medir1 AND fim_medir2;
 
     -- tempo de espera de 100ms
     espera : contadorg_m GENERIC MAP(M => 5000000) PORT MAP(clock, s_reset, s_reset, conta_espera, OPEN, fim_espera, OPEN);
 
     WITH estado SELECT
-      s_distancia_2 <= s_distancia_bcd(11 DOWNTO 8) WHEN "0001", -- só tem dados válidos de medição quando acabou de medir!
-                       s_distancia_bcd(11 DOWNTO 8) WHEN "0010",
-                      "0000" WHEN OTHERS;
+      s_distancia_interna2 <= s_distancia_bcd1(11 DOWNTO 8) WHEN "0001", -- só tem dados válidos de medição quando acabou de medir!
+                              s_distancia_bcd1(11 DOWNTO 8) WHEN "0010",
+                              "0000" WHEN OTHERS;
 
     WITH estado SELECT
-      s_distancia_1 <= s_distancia_bcd(7 DOWNTO 4) WHEN "0001", -- só tem dados válidos de medição quando acabou de medir!
-                       s_distancia_bcd(7 DOWNTO 4) WHEN "0010",
-                      "0000"                       WHEN OTHERS;
+      s_distancia_interna1 <= s_distancia_bcd1(7 DOWNTO 4) WHEN "0001", -- só tem dados válidos de medição quando acabou de medir!
+                              s_distancia_bcd1(7 DOWNTO 4) WHEN "0010",
+                              "0000"                       WHEN OTHERS;
 
     WITH estado SELECT
-      s_distancia_0 <= s_distancia_bcd(3 DOWNTO 0) WHEN "0001", -- só tem dados válidos de medição quando acabou de medir!
-                       s_distancia_bcd(3 DOWNTO 0) WHEN "0010",
-                      "0000"                       WHEN OTHERS;
+      s_distancia_interna0 <= s_distancia_bcd1(3 DOWNTO 0) WHEN "0001", -- só tem dados válidos de medição quando acabou de medir!
+                              s_distancia_bcd1(3 DOWNTO 0) WHEN "0010",
+                              "0000"                       WHEN OTHERS;
 
-    -- ultimo_estado <= estado;
+    WITH estado SELECT
+      s_distancia_porta2 <= s_distancia_bcd2(11 DOWNTO 8) WHEN "0001", -- só tem dados válidos de medição quando acabou de medir!
+                            s_distancia_bcd2(11 DOWNTO 8) WHEN "0010",
+                            "0000" WHEN OTHERS;
 
-    distancia_bcd <= s_distancia_bcd;
+    WITH estado SELECT
+      s_distancia_porta1 <= s_distancia_bcd2(7 DOWNTO 4) WHEN "0001", -- só tem dados válidos de medição quando acabou de medir!
+                            s_distancia_bcd2(7 DOWNTO 4) WHEN "0010",
+                            "0000"                       WHEN OTHERS;
+
+    WITH estado SELECT
+      s_distancia_porta0 <= s_distancia_bcd2(3 DOWNTO 0) WHEN "0001", -- só tem dados válidos de medição quando acabou de medir!
+                            s_distancia_bcd2(3 DOWNTO 0) WHEN "0010",
+                            "0000"                       WHEN OTHERS;
+
+    distancia_bcd1 <= s_distancia_bcd1;
+    distancia_bcd2 <= s_distancia_bcd2;
 
 END ARCHITECTURE;

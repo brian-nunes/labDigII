@@ -6,10 +6,13 @@ entity uart_dados_gaiola_fd is
     port(
         clock, reset, transmitir:     in  std_logic;
         estado:                       in  std_logic_vector(3 downto 0); -- digitos BCD
-        distancia2:                   in  std_logic_vector(3 downto 0); -- e de distancia
-        distancia1:                   in  std_logic_vector(3 downto 0);
-        distancia0:                   in  std_logic_vector(3 downto 0);
-        seletor_dado:                 in  std_logic_vector(2 downto 0);
+        distancia_interna2:                   in std_logic_vector(3 downto 0); -- e de distancia
+        distancia_interna1:                   in std_logic_vector(3 downto 0);
+        distancia_interna0:                   in std_logic_vector(3 downto 0);
+        distancia_porta2:                   in std_logic_vector(3 downto 0); -- e de distancia
+        distancia_porta1:                   in std_logic_vector(3 downto 0);
+        distancia_porta0:                   in std_logic_vector(3 downto 0);
+        seletor_dado:                 in  std_logic_vector(3 downto 0);
         fim_transmissao:              out std_logic;
         saida_serial:                 out std_logic
     );
@@ -53,7 +56,7 @@ architecture uart_dados_gaiola_fd_arch of uart_dados_gaiola_fd is
         );
     end component;
 
-    signal saida_mux, s_id1, s_id2, s_traco, s_estado, s_distancia2,  s_distancia1, s_distancia0, s_ponto: std_logic_vector(7 downto 0);
+    signal saida_mux, s_id1, s_id2, s_traco, s_estado, s_distancia_interna2, s_distancia_interna1, s_distancia_interna0, s_distancia_porta2, s_distancia_porta1, s_distancia_porta0, s_ponto: std_logic_vector(7 downto 0);
     signal caractere : std_logic_vector(7 downto 0);
     signal const_0011: std_logic_vector(3 downto 0) := "0011";
     signal rx_serial_pino: std_logic := '0';
@@ -66,25 +69,37 @@ begin
 
     s_estado <= const_0011 & estado;
 
-    s_distancia2 <= const_0011 & distancia2;
-    s_distancia1 <= const_0011 & distancia1;
-    s_distancia0 <= const_0011 & distancia0;
+    s_distancia_interna2 <= const_0011 & distancia_interna2;
+    s_distancia_interna1 <= const_0011 & distancia_interna1;
+    s_distancia_interna0 <= const_0011 & distancia_interna0;
+
+    s_distancia_porta2 <= const_0011 & distancia_porta2;
+    s_distancia_porta1 <= const_0011 & distancia_porta1;
+    s_distancia_porta0 <= const_0011 & distancia_porta0;
 
     s_ponto <= "00101110";
 
     with seletor_dado select
-      caractere <= s_id1        when "000",
-                   s_id2        when "001",
-                   s_traco      when "010",
-                   s_estado     when "011",
-                   s_distancia2 when "100",
-                   s_distancia1 when "101",
-                   s_distancia0 when "110",
-                   s_ponto      when "111",
+      caractere <= s_id1        when "0000",
+                   s_id2        when "0001",
+
+                   s_traco      when "0010",
+
+                   s_estado     when "0011",
+
+                   s_distancia_interna2 when "0100",
+                   s_distancia_interna1 when "0101",
+                   s_distancia_interna0 when "0110",
+
+                   s_distancia_porta2 when "0111",
+                   s_distancia_porta1 when "1000",
+                   s_distancia_porta0 when "1001",
+
+                   s_ponto      when "1010",
                    s_ponto      when others;
 
     -- mux: mux_4x1_n generic map (BITS => 8) port map (s_estado, s_distancia2, s_distancia1, s_distancia0, seletor_dado, saida_mux);
 
-    transmissor: uart_8N2 port map (clock, reset, transmitir, caractere, rx_serial_pino, rx_serial_pino, saida_serial, fim_transmissao, open, open, open, open, open, open, open, open, open);
+    comunicacao_serial: uart_8N2 port map (clock, reset, transmitir, caractere, rx_serial_pino, rx_serial_pino, saida_serial, fim_transmissao, open, open, open, open, open, open, open, open, open);
 
 end architecture;

@@ -49,6 +49,8 @@ architecture interface_hcsr04_uc_arch of interface_hcsr04_uc is
 
         when registraDistancia => Eprox <= mostraDistancia;
 
+        when mostraDistancia => Eprox <= mostraDistancia;
+
         when others =>            Eprox <= inicial;
 
       end case;
