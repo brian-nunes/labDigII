@@ -20,7 +20,7 @@ END ENTITY;
 ARCHITECTURE arch_gaiola OF gaiola IS
     COMPONENT gaiola_uc
         PORT (
-            clock, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera, fim_receber, dado_R, dado_A, dado_D : IN STD_LOGIC;
+            clock, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera, fim_receber, cmd_R, cmd_A, cmd_D : IN STD_LOGIC;
             distancia_bcd1, distancia_bcd2 : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
             medir, transmitir, reset_interface, conta_espera, salva_estado, limpa_regs : OUT STD_LOGIC;
             posicao_servo : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
