@@ -4,9 +4,9 @@ USE ieee.numeric_std.ALL;
 
 ENTITY gaiola_uc IS
     PORT (
-        clock, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera : IN STD_LOGIC;
+        clock, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera, fim_receber, cmd_R, cmd_A, cmd_D : IN STD_LOGIC;
         distancia_bcd1, distancia_bcd2 : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
-        medir, transmitir, reset_interface, conta_espera, salva_estado: OUT STD_LOGIC;
+        medir, transmitir, reset_interface, conta_espera, salva_estado, limpa_regs: OUT STD_LOGIC;
         posicao_servo : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
         db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
@@ -40,7 +40,11 @@ BEGIN
                 Eprox <= transmite_inativo;
             END IF;
 
-            WHEN inativo => IF armar = '1' AND desarmar = '0' THEN
+            WHEN inativo => IF fim_receber = '1' AND cmd_D = '1' THEN
+                -- Eprox <= mede;
+                Eprox <= transmite_fechado;
+            ELSIF (armar = '1' AND desarmar = '0') OR (fim_receber = '1' AND cmd_A = '1') THEN
+                -- Eprox <= inativo;
                 Eprox <= mede;
             ELSE
                 Eprox <= inativo;
@@ -64,7 +68,7 @@ BEGIN
 
             WHEN compara => IF (distancia_bcd1(11 DOWNTO 8) = "0010" OR distancia_bcd1(11 DOWNTO 8) = "0001" OR distancia_bcd1(11 DOWNTO 8) = "0000") AND NOT((distancia_bcd2(11 DOWNTO 8) = "0001" AND distancia_bcd2(7 DOWNTO 6) = "00") OR distancia_bcd2(11 DOWNTO 8) = "0000") THEN
                 Eprox <= transmite_fechado;
-            ELSIF desarmar = '1' THEN
+            ELSIF desarmar = '1'THEN
                 Eprox <= transmite_inativo;
             ELSE
                 Eprox <= espera;
@@ -72,8 +76,10 @@ BEGIN
 
             WHEN espera => IF fim_espera = '1' THEN
                 Eprox <= mede;
-            ELSIF desarmar = '1' THEN
+            ELSIF (desarmar = '1') OR (fim_receber = '1' AND cmd_D = '1') THEN
                 Eprox <= transmite_inativo;
+            ELSIF (fim_receber = '1' AND cmd_D = '1') THEN
+                Eprox <= transmite_fechado;
             ELSE
                 Eprox <= espera;
             END IF;
@@ -86,8 +92,10 @@ BEGIN
                 Eprox <= transmite_fechado;
             END IF;
 
-            WHEN fechado => IF desarmar = '1' THEN
+            WHEN fechado => IF (desarmar = '1') OR (fim_receber = '1' AND cmd_D = '1') THEN
                 Eprox <= transmite_inativo;
+            ELSIF (fim_receber = '1' AND cmd_A = '1') THEN
+                Eprox <= mede;
             ELSE
                 Eprox <= fechado;
             END IF;
@@ -129,6 +137,12 @@ BEGIN
         salva_estado <= '1' WHEN inativo,
                         '1' WHEN mede,
                         '1' WHEN fechado,
+                        '0' WHEN OTHERS;
+
+    WITH Eatual SELECT
+        limpa_regs <=   '1' WHEN transmite_inativo,
+                        '1' WHEN transmite_medicao,
+                        '1' WHEN transmite_fechado,
                         '0' WHEN OTHERS;
 
     -- Debug Estado (pro Display)

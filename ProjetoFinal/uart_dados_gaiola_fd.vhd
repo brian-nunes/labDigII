@@ -6,13 +6,20 @@ entity uart_dados_gaiola_fd is
     port(
         clock, reset, transmitir:     in  std_logic;
         estado:                       in  std_logic_vector(3 downto 0); -- digitos BCD
+
         distancia_interna2:                   in std_logic_vector(3 downto 0); -- e de distancia
         distancia_interna1:                   in std_logic_vector(3 downto 0);
         distancia_interna0:                   in std_logic_vector(3 downto 0);
+
         distancia_porta2:                   in std_logic_vector(3 downto 0); -- e de distancia
         distancia_porta1:                   in std_logic_vector(3 downto 0);
         distancia_porta0:                   in std_logic_vector(3 downto 0);
         seletor_dado:                 in  std_logic_vector(3 downto 0);
+
+        recepcao_serial:               in std_logic;
+        dado_recebido_rx : out std_logic_vector(7 downto 0);
+        pronto_rx : out std_logic;
+
         fim_transmissao:              out std_logic;
         saida_serial:                 out std_logic
     );
@@ -59,7 +66,8 @@ architecture uart_dados_gaiola_fd_arch of uart_dados_gaiola_fd is
     signal saida_mux, s_id1, s_id2, s_traco, s_estado, s_distancia_interna2, s_distancia_interna1, s_distancia_interna0, s_distancia_porta2, s_distancia_porta1, s_distancia_porta0, s_ponto: std_logic_vector(7 downto 0);
     signal caractere : std_logic_vector(7 downto 0);
     signal const_0011: std_logic_vector(3 downto 0) := "0011";
-    signal rx_serial_pino: std_logic := '0';
+    signal s_recepcao_serial, s_receber : std_logic;
+    -- signal rx_serial_pino: std_logic := '0';
 begin
 
     s_id1 <= const_0011 & "0000";
@@ -98,8 +106,9 @@ begin
                    s_ponto      when "1010",
                    s_ponto      when others;
 
-    -- mux: mux_4x1_n generic map (BITS => 8) port map (s_estado, s_distancia2, s_distancia1, s_distancia0, seletor_dado, saida_mux);
+    s_recepcao_serial <= recepcao_serial;
+    s_receber <= '1'; -- Sempre está recebendo dados
 
-    comunicacao_serial: uart_8N2 port map (clock, reset, transmitir, caractere, rx_serial_pino, rx_serial_pino, saida_serial, fim_transmissao, open, open, open, open, open, open, open, open, open);
+    comunicacao_serial: uart_8N2 port map (clock, reset, transmitir, caractere, s_recepcao_serial, s_receber, saida_serial, fim_transmissao, dado_recebido_rx, open, open, open, open, open, open, open, open);
 
 end architecture;
