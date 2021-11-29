@@ -101,7 +101,7 @@ BEGIN
     fim_medir <= fim_medir1 AND fim_medir2;
 
     -- tempo de espera de 100ms
-    espera : contadorg_m GENERIC MAP(M => 5000000) PORT MAP(clock, s_reset, s_reset, conta_espera, OPEN, fim_espera, OPEN);
+    espera : contadorg_m GENERIC MAP(M => 500000000) PORT MAP(clock, s_reset, s_reset_interface, conta_espera, OPEN, fim_espera, OPEN);
 
     WITH estado SELECT
       s_distancia_interna2 <= s_distancia_bcd1(11 DOWNTO 8) WHEN "0001", -- só tem dados válidos de medição quando acabou de medir!
