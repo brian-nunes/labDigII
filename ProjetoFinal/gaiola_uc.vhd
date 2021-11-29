@@ -4,18 +4,26 @@ USE ieee.numeric_std.ALL;
 
 ENTITY gaiola_uc IS
     PORT (
-        clock, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera : IN STD_LOGIC;
+        clock, reset, armar, desarmar, fim_medir, fim_transmitir, fim_recepcao, fim_espera, fim_timeout : IN STD_LOGIC;
         distancia_bcd1, distancia_bcd2 : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
-        medir, transmitir, reset_interface, conta_espera, salva_estado: OUT STD_LOGIC;
+        medir, transmitir, reset_interface, conta_espera, salva_estado, conta_timeout: OUT STD_LOGIC;
         posicao_servo : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+        db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        dado_recebido_rx : IN STD_LOGIC_VECTOR(7 DOWNTO 0)
     );
 END ENTITY;
 
 ARCHITECTURE gaiola_uc_arch OF gaiola_uc IS
 
-    TYPE tipo_estado IS (transmite_inativo, inativo, mede, transmite_medicao, compara, espera, transmite_fechado, fechado);
+    TYPE tipo_estado IS (transmite_inativo, inativo, mede, transmite_medicao, compara, espera, transmite_fechado, fechado, recebeu_id0, recebeu_id1, recebeu_traco);
     SIGNAL Eatual, Eprox : tipo_estado;
+
+    SIGNAL const_0 : STD_LOGIC_VECTOR(7 DOWNTO 0) := "00110000";
+    SIGNAL const_1 : STD_LOGIC_VECTOR(7 DOWNTO 0) := "00110001";
+    SIGNAL const_traco : STD_LOGIC_VECTOR(7 DOWNTO 0) := "00101101";
+    SIGNAL const_A : STD_LOGIC_VECTOR(7 DOWNTO 0) := "01000001";
+    SIGNAL const_R : STD_LOGIC_VECTOR(7 DOWNTO 0) := "01010010";
+    SIGNAL const_D : STD_LOGIC_VECTOR(7 DOWNTO 0) := "01000100";
 
 BEGIN
 
@@ -30,7 +38,7 @@ BEGIN
     END PROCESS;
 
     -- logica de proximo estado
-    PROCESS (Eatual, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera, distancia_bcd1, distancia_bcd2)
+    PROCESS (Eatual, reset, armar, desarmar, fim_medir, fim_transmitir, fim_espera, distancia_bcd1, distancia_bcd2, fim_recepcao, dado_recebido_rx, fim_timeout)
     BEGIN
         CASE Eatual IS
 
@@ -42,6 +50,8 @@ BEGIN
 
             WHEN inativo => IF armar = '1' AND desarmar = '0' THEN
                 Eprox <= mede;
+            ELSIF fim_recepcao = '1' AND dado_recebido_rx = const_0 THEN
+                Eprox <= recebeu_id0;
             ELSE
                 Eprox <= inativo;
             END IF;
@@ -74,6 +84,8 @@ BEGIN
                 Eprox <= mede;
             ELSIF desarmar = '1' THEN
                 Eprox <= transmite_inativo;
+            ELSIF fim_recepcao = '1' AND dado_recebido_rx = const_0 THEN
+                Eprox <= recebeu_id0;
             ELSE
                 Eprox <= espera;
             END IF;
@@ -88,9 +100,46 @@ BEGIN
 
             WHEN fechado => IF desarmar = '1' THEN
                 Eprox <= transmite_inativo;
+            ELSIF fim_recepcao = '1' AND dado_recebido_rx = const_0 THEN
+                Eprox <= recebeu_id0;
             ELSE
                 Eprox <= fechado;
             END IF;
+
+            WHEN recebeu_id0 => IF desarmar = '1' THEN
+                Eprox <= transmite_inativo;
+            ELSIF fim_recepcao = '1' AND dado_recebido_rx = const_1 THEN
+                Eprox <= recebeu_id1;
+            ELSIF fim_timeout = '1' THEN
+                Eprox <= mede;
+            ELSE
+                Eprox <= recebeu_id0;
+            END IF;
+
+            WHEN recebeu_id1 => IF desarmar = '1' THEN
+                Eprox <= transmite_inativo;
+            ELSIF fim_recepcao = '1' AND dado_recebido_rx = const_traco THEN
+                Eprox <= recebeu_traco;
+            ELSIF fim_timeout = '1' THEN
+                Eprox <= mede;
+            ELSE
+                Eprox <= recebeu_id1;
+            END IF;
+
+            WHEN recebeu_traco => IF desarmar = '1' THEN
+                Eprox <= transmite_inativo;
+            ELSIF fim_recepcao = '1' AND dado_recebido_rx = const_A THEN
+                Eprox <= mede;
+            ELSIF fim_recepcao = '1' AND dado_recebido_rx = const_D THEN
+                Eprox <= fechado;
+            ELSIF fim_recepcao = '1' AND dado_recebido_rx = const_R THEN
+                Eprox <= inativo;
+            ELSIF fim_timeout = '1' THEN
+                Eprox <= mede;
+            ELSE
+                Eprox <= recebeu_traco;
+            END IF;
+
 
             WHEN OTHERS => Eprox <= inativo;
 
@@ -130,6 +179,12 @@ BEGIN
                         '1' WHEN mede,
                         '1' WHEN fechado,
                         '0' WHEN OTHERS;
+
+    WITH Eatual SELECT
+        conta_timeout <= '1' WHEN recebeu_id0,
+                         '1' WHEN recebeu_id1,
+                         '1' WHEN recebeu_traco,
+                         '0' WHEN OTHERS;
 
     -- Debug Estado (pro Display)
     WITH Eatual SELECT

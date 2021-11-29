@@ -6,11 +6,13 @@ use ieee.math_real.all;
 ENTITY gaiola_fd IS
     PORT (
         clock, reset : IN STD_LOGIC;
-        echo1, echo2, medir, transmitir, reset_interface, conta_espera, salva_estado : IN STD_LOGIC;
+        echo1, echo2, medir, transmitir, reset_interface, conta_espera, salva_estado, conta_timeout : IN STD_LOGIC;
         posicao_servo : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         estado : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-        trigger1, trigger2, saida_serial, fim_medir, fim_transmitir, fim_espera, pwm : OUT STD_LOGIC;
-        distancia_bcd1, distancia_bcd2 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
+        trigger1, trigger2, saida_serial, fim_medir, fim_transmitir, fim_recepcao, fim_espera, pwm, fim_timeout : OUT STD_LOGIC;
+        distancia_bcd1, distancia_bcd2 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+        entrada_serial : IN STD_LOGIC;
+        dado_recebido_rx : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
     );
 END ENTITY;
 
@@ -32,6 +34,9 @@ ARCHITECTURE arch_gaiola_fd OF gaiola_fd IS
 
             saida_serial : OUT STD_LOGIC;
             pronto : OUT STD_LOGIC;
+            fim_recepcao : OUT STD_LOGIC;
+            dado_recebido_rx : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+            entrada_serial : IN STD_LOGIC;
             db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
         );
     END COMPONENT;
@@ -95,13 +100,15 @@ BEGIN
 
     hcsr04_porta : interface_hcsr04 PORT MAP(clock, s_reset_interface, s_medir_pulso, echo2, trigger2, s_distancia_bcd2, fim_medir2, OPEN);
 
-    uart : uart_dados_gaiola PORT MAP(clock, s_reset, transmitir, estado, s_distancia_interna2, s_distancia_interna1, s_distancia_interna0, s_distancia_porta2, s_distancia_porta1, s_distancia_porta0, saida_serial, fim_transmitir, OPEN);
+    uart : uart_dados_gaiola PORT MAP(clock, s_reset, transmitir, estado, s_distancia_interna2, s_distancia_interna1, s_distancia_interna0, s_distancia_porta2, s_distancia_porta1, s_distancia_porta0, saida_serial, fim_transmitir, fim_recepcao, dado_recebido_rx, entrada_serial, OPEN);
 
 
     fim_medir <= fim_medir1 AND fim_medir2;
 
     -- tempo de espera de 100ms
     espera : contadorg_m GENERIC MAP(M => 500000000) PORT MAP(clock, s_reset, s_reset_interface, conta_espera, OPEN, fim_espera, OPEN);
+
+    rx_timeout : contadorg_m GENERIC MAP(M => 500000000) PORT MAP(clock, s_reset, s_reset_interface, conta_timeout, OPEN, fim_timeout, OPEN);
 
     WITH estado SELECT
       s_distancia_interna2 <= s_distancia_bcd1(11 DOWNTO 8) WHEN "0001", -- só tem dados válidos de medição quando acabou de medir!

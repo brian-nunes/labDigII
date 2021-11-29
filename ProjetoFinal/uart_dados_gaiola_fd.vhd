@@ -14,6 +14,9 @@ entity uart_dados_gaiola_fd is
         distancia_porta0:                   in std_logic_vector(3 downto 0);
         seletor_dado:                 in  std_logic_vector(3 downto 0);
         fim_transmissao:              out std_logic;
+        fim_recepcao:                 out std_logic;
+        dado_recebido_rx:             out std_logic_vector(7 downto 0);
+        entrada_serial:                in std_logic;
         saida_serial:                 out std_logic
     );
 end entity;
@@ -59,7 +62,7 @@ architecture uart_dados_gaiola_fd_arch of uart_dados_gaiola_fd is
     signal saida_mux, s_id1, s_id2, s_traco, s_estado, s_distancia_interna2, s_distancia_interna1, s_distancia_interna0, s_distancia_porta2, s_distancia_porta1, s_distancia_porta0, s_ponto: std_logic_vector(7 downto 0);
     signal caractere : std_logic_vector(7 downto 0);
     signal const_0011: std_logic_vector(3 downto 0) := "0011";
-    signal rx_serial_pino: std_logic := '0';
+    signal rx_serial_pino: std_logic := '1';
 begin
 
     s_id1 <= const_0011 & "0000";
@@ -100,6 +103,6 @@ begin
 
     -- mux: mux_4x1_n generic map (BITS => 8) port map (s_estado, s_distancia2, s_distancia1, s_distancia0, seletor_dado, saida_mux);
 
-    comunicacao_serial: uart_8N2 port map (clock, reset, transmitir, caractere, rx_serial_pino, rx_serial_pino, saida_serial, fim_transmissao, open, open, open, open, open, open, open, open, open);
+    comunicacao_serial: uart_8N2 port map (clock, reset, transmitir, caractere, entrada_serial, rx_serial_pino, saida_serial, fim_transmissao, dado_recebido_rx, open, fim_recepcao, open, open, open, open, open, open);
 
 end architecture;
