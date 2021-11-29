@@ -20,7 +20,7 @@ entity uart_dados_gaiola is
 
       recepcao_serial:               in std_logic;
       dado_recebido_rx : out std_logic_vector(7 downto 0);
-      pronto_rx : out std_logic;
+      pronto_rx, tem_dado : out std_logic;
 
       saida_serial : OUT STD_LOGIC;
       pronto : OUT STD_LOGIC;
@@ -51,7 +51,7 @@ architecture uart_dados_gaiola_arch of uart_dados_gaiola is
           seletor_dado:                 in std_logic_vector(3 downto 0);
           recepcao_serial:               in std_logic;
           dado_recebido_rx : out std_logic_vector(7 downto 0);
-          pronto_rx : out std_logic;
+          pronto_rx, tem_dado : out std_logic;
           fim_transmissao:              out  std_logic;
           saida_serial:                 out  std_logic
         );
@@ -63,6 +63,6 @@ begin
 
     UC: uart_dados_gaiola_uc port map (clock, reset, transmitir, s_fim_transmissao, pronto, s_transmitir_dado, s_seletor_dado, db_estado);
 
-    FD: uart_dados_gaiola_fd port map (clock, reset, s_transmitir_dado, estado, distancia_interna2, distancia_interna1, distancia_interna0, distancia_porta2, distancia_porta1, distancia_porta0, s_seletor_dado, recepcao_serial, dado_recebido_rx, pronto_rx, s_fim_transmissao, saida_serial);
+    FD: uart_dados_gaiola_fd port map (clock, reset, s_transmitir_dado, estado, distancia_interna2, distancia_interna1, distancia_interna0, distancia_porta2, distancia_porta1, distancia_porta0, s_seletor_dado, recepcao_serial, dado_recebido_rx, pronto_rx, tem_dado, s_fim_transmissao, saida_serial);
 
 end architecture;

@@ -17,7 +17,8 @@ ENTITY gaiola_com_display IS
     display_distancia1 : OUT STD_LOGIC_VECTOR(6 downto 0);
     display_distancia0 : OUT STD_LOGIC_VECTOR(6 downto 0);
 
-    db_dado_recebido_rx : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+    db_dado_recebido_rx : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    db_enable: OUTS STD_LOGIC
   );
 END ENTITY;
 
@@ -34,7 +35,9 @@ ARCHITECTURE gaiola_com_display_arch OF gaiola_com_display IS
     saida_serial : OUT STD_LOGIC;
     db_estado : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
     db_distancia1, db_distancia2: OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
-    db_dado_recebido_rx : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+    db_dado_recebido_rx : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    db_reg_id0, db_reg_id1, db_reg_traco, db_reg_cmd : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    db_enable : OUT STD_LOGIC
   );
   END COMPONENT;
 
@@ -50,7 +53,7 @@ ARCHITECTURE gaiola_com_display_arch OF gaiola_com_display IS
 
 BEGIN
 
-  comp_gaiola : gaiola PORT MAP(clock, reset, armar, desarmar, echo1, echo2, recepcao_serial, trigger1, trigger2, pwm, saida_serial, s_db_estado, s_db_distancia1, s_db_distancia2, db_dado_recebido_rx);
+  comp_gaiola : gaiola PORT MAP(clock, reset, armar, desarmar, echo1, echo2, recepcao_serial, trigger1, trigger2, pwm, saida_serial, s_db_estado, s_db_distancia1, s_db_distancia2, open, db_dado_recebido_rx, open, open, open, db_enable);
 
   hex_estado : hex7seg PORT MAP(s_db_estado, display_estado);
 

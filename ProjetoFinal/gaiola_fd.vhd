@@ -12,7 +12,7 @@ ENTITY gaiola_fd IS
         trigger1, trigger2, saida_serial, fim_medir, fim_transmitir, fim_espera, pwm : OUT STD_LOGIC;
         recepcao_serial:               IN STD_LOGIC;
         dado_recebido_rx : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-        pronto_rx : OUT STD_LOGIC;
+        pronto_rx, tem_dado : OUT STD_LOGIC;
         distancia_bcd1, distancia_bcd2 : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
     );
 END ENTITY;
@@ -35,7 +35,7 @@ ARCHITECTURE arch_gaiola_fd OF gaiola_fd IS
 
             recepcao_serial:               in std_logic;
             dado_recebido_rx : out std_logic_vector(7 downto 0);
-            pronto_rx : out std_logic;
+            pronto_rx, tem_dado : out std_logic;
 
             saida_serial : OUT STD_LOGIC;
             pronto : OUT STD_LOGIC;
@@ -102,7 +102,7 @@ BEGIN
 
     hcsr04_porta : interface_hcsr04 PORT MAP(clock, s_reset_interface, s_medir_pulso, echo2, trigger2, s_distancia_bcd2, fim_medir2, OPEN);
 
-    uart : uart_dados_gaiola PORT MAP(clock, s_reset, transmitir, estado, s_distancia_interna2, s_distancia_interna1, s_distancia_interna0, s_distancia_porta2, s_distancia_porta1, s_distancia_porta0, recepcao_serial, dado_recebido_rx, pronto_rx, saida_serial, fim_transmitir, OPEN);
+    uart : uart_dados_gaiola PORT MAP(clock, s_reset, transmitir, estado, s_distancia_interna2, s_distancia_interna1, s_distancia_interna0, s_distancia_porta2, s_distancia_porta1, s_distancia_porta0, recepcao_serial, dado_recebido_rx, pronto_rx, tem_dado, saida_serial, fim_transmitir, OPEN);
 
 
     fim_medir <= fim_medir1 AND fim_medir2;

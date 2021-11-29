@@ -18,7 +18,7 @@ entity uart_dados_gaiola_fd is
 
         recepcao_serial:               in std_logic;
         dado_recebido_rx : out std_logic_vector(7 downto 0);
-        pronto_rx : out std_logic;
+        pronto_rx, tem_dado : out std_logic;
 
         fim_transmissao:              out std_logic;
         saida_serial:                 out std_logic
@@ -109,6 +109,6 @@ begin
     s_recepcao_serial <= recepcao_serial;
     s_receber <= '1'; -- Sempre está recebendo dados
 
-    comunicacao_serial: uart_8N2 port map (clock, reset, transmitir, caractere, s_recepcao_serial, s_receber, saida_serial, fim_transmissao, dado_recebido_rx, open, open, open, open, open, open, open, open);
+    comunicacao_serial: uart_8N2 port map (clock, reset, transmitir, caractere, s_recepcao_serial, s_receber, saida_serial, fim_transmissao, dado_recebido_rx, tem_dado, open, open, open, open, open, open, open);
 
 end architecture;
